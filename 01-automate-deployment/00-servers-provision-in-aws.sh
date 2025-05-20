@@ -51,6 +51,18 @@ mkdir -p "$LOG_REPO"
 VALIDATE $? "creating log repo"
 
 
-INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --security-group-ids $SECURITY_GR_ID --subnet-id $SUBNET_ID --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' --query 'Instances[*].InstanceId' --output text)
+INSTANCE_ID=$(aws ec2 run-instances \
+  --image-id $AMI \
+  --instance-type $INSTANCE_TYPE \
+  --security-group-ids $SECURITY_GR_ID \
+  --subnet-id $SUBNET_ID \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' \
+  --query 'Instances[*].InstanceId' \
+  --output text)
 
 echo "$INSTANCE_ID"
+
+
+# INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --security-group-ids $SECURITY_GR_ID --subnet-id $SUBNET_ID --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' --query 'Instances[*].InstanceId' --output text)
+
+# echo "$INSTANCE_ID"
