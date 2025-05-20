@@ -21,6 +21,8 @@ SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
 # echo "$LOG_FILE"
 
+echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
+
 if [ $USER_ID -ne 0 ]
 then
     echo -e "$R ERROR: need to provide sudo user access $N"
@@ -31,9 +33,9 @@ fi
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-        echo -e "$2 is Success $N"  | tee -a $LOG_FILE
+        echo -e "$G $2 is Success $N"  | tee -a $LOG_FILE
     else
-        echo -e "$2 is Failed $N"  | tee -a $LOG_FILE
+        echo -e "$R $2 is Failed $N"  | tee -a $LOG_FILE
         exit 1 
     fi    
 }
