@@ -40,7 +40,7 @@ VALIDATE(){
 
 
 mkdir -p "$LOG_REPO"
-VALIDATE() $? "creating log repo"
+VALIDATE $? "creating log repo"
 
 
 
