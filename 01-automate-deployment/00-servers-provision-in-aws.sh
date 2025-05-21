@@ -27,9 +27,8 @@ SUBNET_ID="subnet-0b2ada4cfcc744c81"
 INSTANCE_TYPE="t2.micro"
 ZONE_ID="Z07146881RI4INQX613W7"
 DOMAIN_NAME="royalreddy.site"
-INSTANCES=("cataloge")
-
-# INSTANCES=("frontend" "cataloge" "cart" "user" "shipping" "payment" "dispatch" "mongodb" "mysql" "redis" "rabbitmq")
+# INSTANCES=("cataloge")
+INSTANCES=("frontend" "cataloge" "cart" "user" "shipping" "payment" "dispatch" "mongodb" "mysql" "redis" "rabbitmq")
 
 
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
@@ -68,7 +67,6 @@ do
         --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value="'$instance'"}]' \
         --query 'Instances[*].InstanceId' \
         --output text)
-    sleep 10
     if [ $instance != "frontend" ]
     then
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
