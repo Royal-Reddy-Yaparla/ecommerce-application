@@ -31,9 +31,9 @@ fi
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-        echo -e "$G $2 is Success $N"  | tee -a $LOG_FILE
+        echo -e "$2 is $G Success $N"  | tee -a $LOG_FILE
     else
-        echo -e "$R $2 is Failed $N"  | tee -a $LOG_FILE
+        echo -e "$2 is $G Failed $N"  | tee -a $LOG_FILE
         exit 1 
     fi    
 }
@@ -57,14 +57,14 @@ VALIDATE $? "setup mongoDB repo file"
 dnf install mongodb-org -y &>>$LOG_FILE
 VALIDATE $? "installing mongoDB" 
 
-systemctl enable mongod 
-VALIDATE $? "enabling mongoDB" | tee -a $LOG_FILE
+systemctl enable mongod &>>$LOG_FILE
+VALIDATE $? "enabling mongoDB" 
 
-systemctl start mongod 
-VALIDATE $? "starting mongoDB" | tee -a $LOG_FILE
+systemctl start mongod &>>$LOG_FILE
+VALIDATE $? "starting mongoDB"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
-VALIDATE $? "updating listen address" | tee -a $LOG_FILE
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
+VALIDATE $? "updating listen address" 
 
-systemctl restart mongod
-VALIDATE $? "restarting mongoDB" | tee -a $LOG_FILE
+systemctl restart mongod &>>$LOG_FILE
+VALIDATE $? "restarting mongoDB"
