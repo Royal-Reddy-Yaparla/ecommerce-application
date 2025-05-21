@@ -27,7 +27,7 @@ SUBNET_ID="subnet-0b2ada4cfcc744c81"
 INSTANCE_TYPE="t2.micro"
 ZONE_ID="Z07146881RI4INQX613W7"
 DOMAIN_NAME="royalreddy.site"
-INSTANCES=("frontend" "cataloge")
+INSTANCES=("cataloge")
 
 # INSTANCES=("frontend" "cataloge" "cart" "user" "shipping" "payment" "dispatch" "mongodb" "mysql" "redis" "rabbitmq")
 
