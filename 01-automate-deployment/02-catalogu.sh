@@ -90,3 +90,18 @@ VALIDATE $? "enabling catalogue"
 
 systemctl start catalogue
 VALIDATE $? "starting catalogue"
+
+
+cp $INITIAL_REPO/mongo.repo /etc/yum.repos.d/mongo.repo 
+VALIDATE $? "setup mongoDB repo file" 
+
+dnf install mongodb-org -y &>>$LOG_FILE
+VALIDATE $? "installing mongoDB" 
+
+
+mongosh --host mongodb.royalreddy.site </app/db/master-data.js &>>$LOG_FILE
+VALIDATE $? "loading master date" 
+
+mongosh --host mongodb.royalreddy.site
+VALIDATE $? "connecting mongodb server" 
+
