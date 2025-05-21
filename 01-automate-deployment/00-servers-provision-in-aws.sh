@@ -56,7 +56,7 @@ VALIDATE $? "creating log repo"
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
 
-for instance in ${INSTANCES[@]}
+# for instance in ${INSTANCES[@]}
 for instance in $@
 do 
     # ec2 provision
