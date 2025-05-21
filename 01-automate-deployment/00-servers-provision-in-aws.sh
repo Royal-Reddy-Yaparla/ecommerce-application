@@ -57,7 +57,7 @@ VALIDATE $? "creating log repo"
 export PATH=$PATH:/usr/local/bin:/usr/bin
 
 
-for instance in ${INSTANCES[@]}
+for instance in $@
 do 
     INSTANCE_ID=$(aws ec2 run-instances \
         --image-id $AMI \
