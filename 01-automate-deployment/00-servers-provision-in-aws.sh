@@ -76,15 +76,17 @@ aws route53 change-resource-record-sets \
   --hosted-zone-id $ZONE_ID \
   --change-batch '
   {
-    "Comment": "Create a new A record ",
-    "Changes": [{
-        "Action": "UPSERT",
-        "ResourceRecordSet": {
-            "Name": "royalreddy.site",
-            "Type": "A",
-            "TTL": 1,
-        "ResourceRecords": [{ "Value": $PUBLIC_IP}]
-        }
+    "Comment": "Create a new A record "
+    ,"Changes": [{
+        "Action"            : "UPSERT"
+        ,"ResourceRecordSet": {
+            "Name"          : "royalreddy.site"
+            ,"Type"         : "A"
+            ,"TTL"          : 1,
+        ,"ResourceRecords": [{ 
+                "Value"     : "'$PUBLIC_IP'"
+        }]
+    }
  }]
 }'
 # INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --security-group-ids $SECURITY_GR_ID --subnet-id $SUBNET_ID --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' --query 'Instances[*].InstanceId' --output text)
