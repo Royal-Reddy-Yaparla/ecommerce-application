@@ -25,6 +25,7 @@ AMI="ami-09c813fb71547fc4f"
 SECURITY_GR_ID="sg-0c07dddd955fb376a"
 SUBNET_ID="subnet-0b2ada4cfcc744c81"
 INSTANCE_TYPE="t2.micro"
+ZONE_ID="Z07146881RI4INQX613W7"
 
 
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
@@ -69,6 +70,11 @@ echo "$PUBLIC_IP"
 PRIVATE_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
 
 echo "$PRIVATE_IP"
+
+
+aws route53 change-resource-record-sets \
+  --hosted-zone-id $ZONE_ID \
+  --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"royalreddy.com.","Type":"A","TTL":1,"ResourceRecords":[{"Value":"$PUBLIC_IP"}]}}]}'
 # INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --security-group-ids $SECURITY_GR_ID --subnet-id $SUBNET_ID --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' --query 'Instances[*].InstanceId' --output text)
 
 # echo "$INSTANCE_ID"
