@@ -43,9 +43,10 @@ mkdir -p "$LOG_REPO"
 VALIDATE $? "creating log repo"
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo
-VALIDATE $? "setup mongoDB repo file"
+VALIDATE $? "setup mongoDB repo file" 
 
 dnf list installed mongodb &>>$LOG_FILE
+VALIDATE $? "installing mongoDB"  
 
 if [ $? -eq 0 ]
 then 
@@ -62,7 +63,7 @@ VALIDATE $? "enabling mongoDB" | tee -a $LOG_FILE
 systemctl start mongod 
 VALIDATE $? "starting mongoDB" | tee -a $LOG_FILE
 
-sed -i 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0' /etc/mongod.conf
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 VALIDATE $? "updating listen address" | tee -a $LOG_FILE
 
 systemctl restart mongod
