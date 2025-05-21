@@ -87,7 +87,7 @@ do
             ,"Changes": [{
                 "Action"              : "UPSERT"
                 ,"ResourceRecordSet"  : {
-                    "Name"              : "royalreddy.site"
+                    "Name"              : "'$instance'.royalreddy.site"
                     ,"Type"             : "A"
                     ,"TTL"              : 60
                     ,"ResourceRecords"  : [{
