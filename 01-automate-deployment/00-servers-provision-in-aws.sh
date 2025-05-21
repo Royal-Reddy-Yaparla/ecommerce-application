@@ -27,7 +27,9 @@ SUBNET_ID="subnet-0b2ada4cfcc744c81"
 INSTANCE_TYPE="t2.micro"
 ZONE_ID="Z07146881RI4INQX613W7"
 DOMAIN_NAME="royalreddy.site"
-INSTANCES=("frontend" "cataloge" "cart" "user" "shipping" "payment" "dispatch" "mongodb" "mysql" "redis" "rabbitmq")
+INSTANCES=("frontend" "cataloge")
+
+# INSTANCES=("frontend" "cataloge" "cart" "user" "shipping" "payment" "dispatch" "mongodb" "mysql" "redis" "rabbitmq")
 
 
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
@@ -74,22 +76,24 @@ do
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
         RECORD_NAME="'$DOMAIN_NAME'"
     fi
-    aws route53 change-resource-record-sets \
-    --hosted-zone-id $ZONE_ID \
-    --change-batch '{
-            "Comment": "Create a new A record",
-            "Changes": [{
-                "Action"            : "UPSERT",
-                "ResourceRecordSet": {
-                    "Name"          : "'$RECORD_NAME'",
-                    "Type"         : "A",
-                    "TTL"          : 1,
-                    "ResourceRecords": [{ 
-                            "Value"     : "'$IP'"
-                    }]
-                }
-            }]
-    }'
+
+    echo "$RECORD_NAME"
+    # aws route53 change-resource-record-sets \
+    # --hosted-zone-id $ZONE_ID \
+    # --change-batch '{
+    #         "Comment": "Create a new A record",
+    #         "Changes": [{
+    #             "Action"            : "UPSERT",
+    #             "ResourceRecordSet": {
+    #                 "Name"          : "'$RECORD_NAME'",
+    #                 "Type"         : "A",
+    #                 "TTL"          : 1,
+    #                 "ResourceRecords": [{ 
+    #                         "Value"     : "'$IP'"
+    #                 }]
+    #             }
+    #         }]
+    # }'
 done
 
 
