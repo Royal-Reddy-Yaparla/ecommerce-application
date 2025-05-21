@@ -54,15 +54,16 @@ then
 fi
 
 dnf install mongodb-org -y 
-VALIDATE $? "installing mongoDB"
+VALIDATE $? "installing mongoDB" &>>$LOG_FILE
 
 systemctl enable mongod 
-VALIDATE $? "enabling mongoDB"
+VALIDATE $? "enabling mongoDB" | tee -a $LOG_FILE
 
 systemctl start mongod 
-VALIDATE $? "starting mongoDB"
+VALIDATE $? "starting mongoDB" | tee -a $LOG_FILE
 
-sed -i 's/127.0.0.1/0.0.0.0' /etc/mongod.conf
+sed -i 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0' /etc/mongod.conf
+VALIDATE $? "updating listen address" | tee -a $LOG_FILE
 
 systemctl restart mongod
-VALIDATE $? "restarting mongoDB"
+VALIDATE $? "restarting mongoDB" | tee -a $LOG_FILE
