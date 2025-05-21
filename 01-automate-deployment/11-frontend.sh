@@ -18,7 +18,7 @@ USER_ID=$(id -u)
 
 # logs setup
 LOG_REPO="/var/log/ecommerce-app"
-LOG_FILE="$LOG_REPO/cataloge.log"
+LOG_FILE="$LOG_REPO/frontend.log"
 
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
 
