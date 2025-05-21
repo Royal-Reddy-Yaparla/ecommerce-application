@@ -58,7 +58,38 @@ export PATH=$PATH:/usr/local/bin:/usr/bin
 
 for instance in ${INSTANCES[@]}
 do 
-    echo "$instance"
+    INSTANCE_ID=$(aws ec2 run-instances \
+        --image-id $AMI \
+        --instance-type $INSTANCE_TYPE \
+        --security-group-ids $SECURITY_GR_ID \
+        --subnet-id $SUBNET_ID \
+        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value="'$instance'"}]' \
+        --query 'Instances[*].InstanceId' \
+        --output text)
+    if [ $instance != "frontend"]
+    then
+        IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
+        RECORD_NAME="'$instance.$DOMAIN_NAME'"
+    else 
+        IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+        RECORD_NAME="'$DOMAIN_NAME'"
+    fi
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
+    --change-batch '{
+            "Comment": "Create a new A record",
+            "Changes": [{
+                "Action"            : "UPSERT",
+                "ResourceRecordSet": {
+                    "Name"          : "'$RECORD_NAME'",
+                    "Type"         : "A",
+                    "TTL"          : 1,
+                    "ResourceRecords": [{ 
+                            "Value"     : "'$IP'"
+                    }]
+                }
+            }]
+    }'
 done
 
 
