@@ -54,8 +54,8 @@ VALIDATE $? "setup mongoDB repo file"
 #     exit 1
 # fi
 
-dnf install mongodb-org -y 
-VALIDATE $? "installing mongoDB" &>>$LOG_FILE
+dnf install mongodb-org -y &>>$LOG_FILE
+VALIDATE $? "installing mongoDB" 
 
 systemctl enable mongod 
 VALIDATE $? "enabling mongoDB" | tee -a $LOG_FILE
