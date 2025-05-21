@@ -87,9 +87,9 @@ do
             ,"Changes": [{
                 "Action"              : "UPSERT"
                 ,"ResourceRecordSet"  : {
-                    "Name"              : '"$RECORD_NAME"'
+                    "Name"              : "royalreddy.site"
                     ,"Type"             : "A"
-                    ,"TTL"              : 1
+                    ,"TTL"              : 60
                     ,"ResourceRecords"  : [{
                         "Value"         : "'$IP'"
                     }]
