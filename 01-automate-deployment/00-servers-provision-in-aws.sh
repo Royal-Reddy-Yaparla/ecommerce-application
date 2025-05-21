@@ -50,7 +50,7 @@ VALIDATE(){
 mkdir -p "$LOG_REPO"
 VALIDATE $? "creating log repo"
 
-
+export PATH=$PATH:/usr/local/bin:/usr/bin
 INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AMI \
   --instance-type $INSTANCE_TYPE \
