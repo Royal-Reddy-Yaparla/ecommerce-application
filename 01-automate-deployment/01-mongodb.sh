@@ -45,8 +45,8 @@ VALIDATE $? "creating log repo"
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "setup mongoDB repo file" 
 
-dnf list installed mongodb &>>$LOG_FILE
-VALIDATE $? "installing mongoDB"  
+# dnf list installed mongodb &>>$LOG_FILE
+# VALIDATE $? "installing mongoDB"  
 
 if [ $? -eq 0 ]
 then 
