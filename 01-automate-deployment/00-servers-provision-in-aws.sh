@@ -56,9 +56,10 @@ VALIDATE $? "creating log repo"
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
 
-
+for instance in ${INSTANCES[@]}
 for instance in $@
 do 
+    # ec2 provision
     INSTANCE_ID=$(aws ec2 run-instances \
         --image-id $AMI \
         --instance-type $INSTANCE_TYPE \
@@ -76,7 +77,8 @@ do
         RECORD_NAME="'$DOMAIN_NAME'"
     fi
 
-    echo "$RECORD_NAME"
+    echo "$instance:: $IP"
+    # route53 provision
     aws route53 change-resource-record-sets \
         --hosted-zone-id $ZONE_ID \
         --change-batch '
@@ -93,45 +95,8 @@ do
                     }]
                 }
             }]
-        }'
+        }' | tee -a $LOG_FILE
 done
 
 
-
-# INSTANCE_ID=$(aws ec2 run-instances \
-#   --image-id $AMI \
-#   --instance-type $INSTANCE_TYPE \
-#   --security-group-ids $SECURITY_GR_ID \
-#   --subnet-id $SUBNET_ID \
-#   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' \
-#   --query 'Instances[*].InstanceId' \
-#   --output text)
-
-# echo "$INSTANCE_ID"
-
-# PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-
-# echo "$PUBLIC_IP"
-
-# PRIVATE_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
-
-# echo "$PRIVATE_IP"
-
-
-# aws route53 change-resource-record-sets \
-#   --hosted-zone-id $ZONE_ID \
-#   --change-batch '{
-#         "Comment": "Create a new A record",
-#         "Changes": [{
-#             "Action"            : "UPSERT",
-#             "ResourceRecordSet": {
-#                 "Name"          : "'$DOMAIN_NAME'",
-#                 "Type"         : "A",
-#                 "TTL"          : 1,
-#                 "ResourceRecords": [{ 
-#                         "Value"     : "'$PUBLIC_IP'"
-#                 }]
-#             }
-#         }]
-# }'
 
