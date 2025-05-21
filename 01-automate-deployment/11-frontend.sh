@@ -58,7 +58,7 @@ VALIDATE $? "enabling nginx"
 systemctl start nginx 
 VALIDATE $? "starting nginx" 
 
-rm -rf /usr/share/nginx/html/* 
+rm -rf /usr/share/nginx/html/*  &>>$LOG_FILE
 VALIDATE $? "removing nginx default files"
 
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
