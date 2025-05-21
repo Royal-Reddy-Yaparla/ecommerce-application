@@ -12,6 +12,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+INITIAL_REPO=$PWD
 
 USER_ID=$(id -u)
 
@@ -69,7 +70,7 @@ VALIDATE $? "unzip applicaion code in /app"
 npm install  &>>$LOG_FILE
 VALIDATE $? "installing application dependencies"
 
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp $INITIAL_REPO/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "adding service file"
 
 systemctl daemon-reload 
