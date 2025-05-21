@@ -45,6 +45,14 @@ VALIDATE $? "creating log repo"
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "setup mongoDB repo file"
 
+dnf list installed mongodb &>>$LOG_FILE
+
+if [ $? -eq 0 ]
+then 
+    echo -e "$Y mongodb already installed $N"  | tee -a $LOG_FILE
+    exit 1
+fi
+
 dnf install mongodb-org -y 
 VALIDATE $? "installing mongoDB"
 
@@ -53,6 +61,8 @@ VALIDATE $? "enabling mongoDB"
 
 systemctl start mongod 
 VALIDATE $? "starting mongoDB"
+
+sed -i 's/127.0.0.1/0.0.0.0' /etc/mongod.conf
 
 systemctl restart mongod
 VALIDATE $? "restarting mongoDB"
