@@ -67,7 +67,7 @@ VALIDATE $? "downloading application code"
 cd /usr/share/nginx/html 
 VALIDATE $? "changing repo to /usr/share/nginx/html " 
 
-unzip /tmp/frontend.zip
+unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "unzipping application code" 
 
 
