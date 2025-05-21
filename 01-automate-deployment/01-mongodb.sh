@@ -48,11 +48,11 @@ VALIDATE $? "setup mongoDB repo file"
 # dnf list installed mongodb &>>$LOG_FILE
 # VALIDATE $? "installing mongoDB"  
 
-if [ $? -eq 0 ]
-then 
-    echo -e "$Y mongodb already installed $N"  | tee -a $LOG_FILE
-    exit 1
-fi
+# if [ $? -eq 0 ]
+# then 
+#     echo -e "$Y mongodb already installed $N"  | tee -a $LOG_FILE
+#     exit 1
+# fi
 
 dnf install mongodb-org -y 
 VALIDATE $? "installing mongoDB" &>>$LOG_FILE
