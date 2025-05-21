@@ -27,6 +27,7 @@ SUBNET_ID="subnet-0b2ada4cfcc744c81"
 INSTANCE_TYPE="t2.micro"
 ZONE_ID="Z07146881RI4INQX613W7"
 DOMAIN_NAME="royalreddy.site"
+INSTANCES=("frontend" "cataloge" "cart" "user" "shipping" "payment" "dispatch" "mongodb" "mysql" "redis" "rabbitmq")
 
 
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
@@ -53,42 +54,49 @@ mkdir -p "$LOG_REPO"
 VALIDATE $? "creating log repo"
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
-INSTANCE_ID=$(aws ec2 run-instances \
-  --image-id $AMI \
-  --instance-type $INSTANCE_TYPE \
-  --security-group-ids $SECURITY_GR_ID \
-  --subnet-id $SUBNET_ID \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' \
-  --query 'Instances[*].InstanceId' \
-  --output text)
-
-echo "$INSTANCE_ID"
-
-PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-
-echo "$PUBLIC_IP"
-
-PRIVATE_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
-
-echo "$PRIVATE_IP"
 
 
-aws route53 change-resource-record-sets \
-  --hosted-zone-id $ZONE_ID \
-  --change-batch '{
-        "Comment": "Create a new A record",
-        "Changes": [{
-            "Action"            : "UPSERT",
-            "ResourceRecordSet": {
-                "Name"          : "'$DOMAIN_NAME'",
-                "Type"         : "A",
-                "TTL"          : 1,
-                "ResourceRecords": [{ 
-                        "Value"     : "'$PUBLIC_IP'"
-                }]
-            }
-        }]
-}'
-# INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --security-group-ids $SECURITY_GR_ID --subnet-id $SUBNET_ID --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' --query 'Instances[*].InstanceId' --output text)
+for instance in {$INSTANCES[@]}
+do 
+    echo "$instance"
+done
+
+
+
+# INSTANCE_ID=$(aws ec2 run-instances \
+#   --image-id $AMI \
+#   --instance-type $INSTANCE_TYPE \
+#   --security-group-ids $SECURITY_GR_ID \
+#   --subnet-id $SUBNET_ID \
+#   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=test}]' \
+#   --query 'Instances[*].InstanceId' \
+#   --output text)
 
 # echo "$INSTANCE_ID"
+
+# PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+
+# echo "$PUBLIC_IP"
+
+# PRIVATE_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
+
+# echo "$PRIVATE_IP"
+
+
+# aws route53 change-resource-record-sets \
+#   --hosted-zone-id $ZONE_ID \
+#   --change-batch '{
+#         "Comment": "Create a new A record",
+#         "Changes": [{
+#             "Action"            : "UPSERT",
+#             "ResourceRecordSet": {
+#                 "Name"          : "'$DOMAIN_NAME'",
+#                 "Type"         : "A",
+#                 "TTL"          : 1,
+#                 "ResourceRecords": [{ 
+#                         "Value"     : "'$PUBLIC_IP'"
+#                 }]
+#             }
+#         }]
+# }'
+
