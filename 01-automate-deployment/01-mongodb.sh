@@ -42,7 +42,7 @@ VALIDATE(){
 mkdir -p "$LOG_REPO"
 VALIDATE $? "creating log repo"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp mongo.repo /etc/yum.repos.d/mongo.repo 
 VALIDATE $? "setup mongoDB repo file" 
 
 # dnf list installed mongodb &>>$LOG_FILE
