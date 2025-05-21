@@ -102,6 +102,6 @@ VALIDATE $? "installing mongoDB"
 mongosh --host mongodb.royalreddy.site </app/db/master-data.js &>>$LOG_FILE
 VALIDATE $? "loading master date" 
 
-mongosh --host mongodb.royalreddy.site
-VALIDATE $? "connecting mongodb server" 
+# mongosh --host mongodb.royalreddy.site
+# VALIDATE $? "connecting mongodb server" 
 
