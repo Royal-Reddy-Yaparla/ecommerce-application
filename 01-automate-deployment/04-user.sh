@@ -3,7 +3,7 @@ SHELL_START=$(date +%s)
 
 #############################################################################
 # Author: ROYAL 
-# Date: 21-05-2025
+# Date: 22-05-2025
 # Version: v1
 # Purpose: Automate user-component configuration
 #############################################################################
@@ -14,11 +14,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-echo -e "scripted stated at::$Y $(date) $N" 
-
-
-INITIAL_REPO=$PWD
-
+echo -e "scripted stated at::$Y $(date) $N"
 USER_ID=$(id -u)
 
 # logs setup
@@ -46,9 +42,6 @@ VALIDATE(){
     fi    
 }
 
-
-
-
 dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disabling default nodejs package" 
 
@@ -70,7 +63,7 @@ fi
 mkdir -p /app 
 VALIDATE $? "adding app repo" 
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading application code" 
 
 cd /app 
@@ -79,38 +72,20 @@ VALIDATE $? "changing directory to app"
 rm -rf *
 VALIDATE $? "removing existing files in app"
 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
+unzip /tmp/user.zip &>>$LOG_FILE
 VALIDATE $? "unzip applicaion code in /app"
 
 npm install  &>>$LOG_FILE
 VALIDATE $? "installing application dependencies"
 
-cp $INITIAL_REPO/catalogue.service /etc/systemd/system/catalogue.service
+cp $INITIAL_REPO/user.service /etc/systemd/system/user.service
 VALIDATE $? "adding service file"
 
 systemctl daemon-reload 
 VALIDATE $? "daemon-reload"
 
-systemctl enable catalogue 
-VALIDATE $? "enabling catalogue" 
+systemctl enable user 
+VALIDATE $? "enabling user" 
 
-systemctl start catalogue
-VALIDATE $? "starting catalogue"
-
-
-cp $INITIAL_REPO/mongo.repo /etc/yum.repos.d/mongo.repo 
-VALIDATE $? "setup mongoDB repo file" 
-
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "installing mongoDB" 
-
-
-mongosh --host mongodb.royalreddy.site </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "loading master date" 
-
-# mongosh --host mongodb.royalreddy.site
-# VALIDATE $? "connecting mongodb server" 
-
-SHELL_END=$(date +%s)
-TOTEL=$((SHELL_END-SHELL_START))
-echo -e "time taken for script execution: $Y $TOTEL seconds $N"
+systemctl start user
+VALIDATE $? "starting user"
