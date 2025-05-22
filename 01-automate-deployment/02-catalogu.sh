@@ -26,7 +26,7 @@ LOG_REPO="/var/log/ecommerce-app"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
 
-
+mkdir -p "$LOG_REPO"
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
 
 if [ $USER_ID -ne 0 ]
@@ -47,8 +47,7 @@ VALIDATE(){
 }
 
 
-mkdir -p "$LOG_REPO"
-VALIDATE $? "creating log repo"
+
 
 dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disabling default nodejs package" 
