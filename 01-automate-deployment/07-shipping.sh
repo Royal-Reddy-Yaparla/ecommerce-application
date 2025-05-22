@@ -3,9 +3,9 @@ SHELL_START=$(date +%s)
 
 #############################################################################
 # Author: ROYAL 
-# Date: 21-05-2025
+# Date: 22-05-2025
 # Version: v1
-# Purpose: Automate user-component configuration
+# Purpose: Automate shipping-component configuration
 #############################################################################
 
 
@@ -14,13 +14,9 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-echo -e "scripted stated at::$Y $(date) $N" 
-
-
-INITIAL_REPO=$PWD
-
+echo -e "scripted stated at::$Y $(date) $N"
 USER_ID=$(id -u)
-
+INITIAL_REPO=$PWD 
 # logs setup
 LOG_REPO="/var/log/ecommerce-app"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
@@ -28,6 +24,9 @@ LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
 
 mkdir -p "$LOG_REPO"
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
+
+echo "Please enter root password to setup"
+read -s MYSQL_ROOT_PASSWORD
 
 if [ $USER_ID -ne 0 ]
 then
@@ -46,17 +45,9 @@ VALIDATE(){
     fi    
 }
 
+dnf install maven -y &>>$LOG_FILE
+VALIDATE $? "installing maven"
 
-
-
-dnf module disable nodejs -y &>>$LOG_FILE
-VALIDATE $? "disabling default nodejs package" 
-
-dnf module enable nodejs:20 -y &>>$LOG_FILE
-VALIDATE $? "enabling nodejs:20 package" 
-
-dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "installing nodejs" 
 
 # checking use exist or not
 id roboshop &>>$LOG_FILE
@@ -67,7 +58,7 @@ then
     VALIDATE $? "adding application user" 
 fi
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
+curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading application code" 
 
 cd /app 
@@ -76,37 +67,44 @@ VALIDATE $? "changing directory to app"
 rm -rf *
 VALIDATE $? "removing existing files in app"
 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
+unzip /tmp/shipping.zip &>>$LOG_FILE
 VALIDATE $? "unzip applicaion code in /app"
 
-npm install  &>>$LOG_FILE
-VALIDATE $? "installing application dependencies"
+mvn clean package &>>$LOG_FILE
+VALIDATE() $? "mavan build and package"
 
-cp $INITIAL_REPO/catalogue.service /etc/systemd/system/catalogue.service
-VALIDATE $? "adding service file"
+mv $INITIAL_REPO/target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
+VALIDATE() $? "renaming package"
 
-systemctl daemon-reload 
+
+systemctl daemon-reload
 VALIDATE $? "daemon-reload"
 
-systemctl enable catalogue 
-VALIDATE $? "enabling catalogue" 
+systemctl enable shipping 
+VALIDATE $? "enabling shipping" 
 
-systemctl start catalogue
-VALIDATE $? "starting catalogue"
-
-
-cp $INITIAL_REPO/mongo.repo /etc/yum.repos.d/mongo.repo 
-VALIDATE $? "setup mongoDB repo file" 
-
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "installing mongoDB" 
+systemctl start shipping
+VALIDATE $? "starting shipping"
 
 
-mongosh --host mongodb.royalreddy.site </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "loading master date" 
+dnf install mysql -y  &>>$LOG_FILE
+VALIDATE $? "Install MySQL"
 
-# mongosh --host mongodb.royalreddy.site
-# VALIDATE $? "connecting mongodb server" 
+
+mysql -h mysql.daws84s.site -u root -p$MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE
+if [ $? -ne 0 ]
+then
+    mysql -h mysql.daws84s.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+    mysql -h mysql.daws84s.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
+    mysql -h mysql.daws84s.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
+    VALIDATE $? "Loading master data into MySQL"
+else
+    echo -e "Data is already loaded into MySQL ... $Y SKIPPING $N"
+fi
+
+
+systemctl restart shipping &>>$LOG_FILE
+VALIDATE $? "Restart shipping"
 
 SHELL_END=$(date +%s)
 TOTEL=$((SHELL_END-SHELL_START))

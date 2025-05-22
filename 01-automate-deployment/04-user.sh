@@ -60,8 +60,7 @@ then
     VALIDATE $? "adding application user" 
 fi
 
-mkdir -p /app 
-VALIDATE $? "adding app repo" 
+
 
 curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading application code" 
@@ -89,3 +88,7 @@ VALIDATE $? "enabling user"
 
 systemctl start user
 VALIDATE $? "starting user"
+
+SHELL_END=$(date +%s)
+TOTEL=$((SHELL_END-SHELL_START))
+echo -e "time taken for script execution: $Y $TOTEL seconds $N"

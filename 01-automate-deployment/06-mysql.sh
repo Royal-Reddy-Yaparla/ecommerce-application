@@ -3,9 +3,9 @@ SHELL_START=$(date +%s)
 
 #############################################################################
 # Author: ROYAL 
-# Date: 21-05-2025
+# Date: 22-05-2025
 # Version: v1
-# Purpose: Automate mongodb configuration
+# Purpose: Automate mysql configuration
 #############################################################################
 
 
@@ -43,35 +43,16 @@ VALIDATE(){
     fi    
 }
 
+dnf install mysql-server -y
+VALIDATE $? "installing mysql" 
 
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo 
-VALIDATE $? "setup mongoDB repo file" 
+systemctl enable mysqld
+VALIDATE $? "enabling mysqld" 
 
-# dnf list installed mongodb &>>$LOG_FILE
-# VALIDATE $? "installing mongoDB"  
+systemctl start mysqld  
+VALIDATE $? "starting mysqld"
 
-# if [ $? -eq 0 ]
-# then 
-#     echo -e "$Y mongodb already installed $N"  | tee -a $LOG_FILE
-#     exit 1
-# fi
 
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "installing mongoDB" 
-
-systemctl enable mongod &>>$LOG_FILE
-VALIDATE $? "enabling mongoDB" 
-
-systemctl start mongod &>>$LOG_FILE
-VALIDATE $? "starting mongoDB"
-
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
-VALIDATE $? "updating listen address" 
-
-systemctl restart mongod &>>$LOG_FILE
-VALIDATE $? "restarting mongoDB"
-
-SHELL_END=$(date +%s)
-TOTEL=$((SHELL_END-SHELL_START))
-echo -e "time taken for script execution: $Y $TOTEL seconds $N"
+mysql_secure_installation --set-root-pass RoboShop@1
+VALIDATE $? "setting up root password"

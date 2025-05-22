@@ -32,7 +32,7 @@ DOMAIN_NAME="royalreddy.site"
 # INSTANCES=("cataloge")
 INSTANCES=("frontend" "cataloge" "cart" "user" "shipping" "payment" "dispatch" "mongodb" "mysql" "redis" "rabbitmq")
 
-
+mkdir -p "$LOG_REPO"
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
 
 if [ $USER_ID -ne 0 ]
@@ -53,8 +53,7 @@ VALIDATE(){
 }
 
 
-mkdir -p "$LOG_REPO"
-VALIDATE $? "creating log repo"
+
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
 

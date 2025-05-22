@@ -46,9 +46,6 @@ VALIDATE(){
 }
 
 
-mkdir -p "$LOG_REPO"
-
-
 dnf module disable nginx -y &>>$LOG_FILE
 VALIDATE $? "disabling default nginx package" 
 

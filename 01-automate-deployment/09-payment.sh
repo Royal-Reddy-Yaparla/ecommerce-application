@@ -3,9 +3,9 @@ SHELL_START=$(date +%s)
 
 #############################################################################
 # Author: ROYAL 
-# Date: 21-05-2025
+# Date: 22-05-2025
 # Version: v1
-# Purpose: Automate user-component configuration
+# Purpose: Automate payment-component configuration
 #############################################################################
 
 
@@ -14,13 +14,9 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-echo -e "scripted stated at::$Y $(date) $N" 
-
-
-INITIAL_REPO=$PWD
-
+echo -e "scripted stated at::$Y $(date) $N"
 USER_ID=$(id -u)
-
+INITIAL_REPO=$PWD 
 # logs setup
 LOG_REPO="/var/log/ecommerce-app"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
@@ -46,17 +42,8 @@ VALIDATE(){
     fi    
 }
 
-
-
-
-dnf module disable nodejs -y &>>$LOG_FILE
-VALIDATE $? "disabling default nodejs package" 
-
-dnf module enable nodejs:20 -y &>>$LOG_FILE
-VALIDATE $? "enabling nodejs:20 package" 
-
-dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "installing nodejs" 
+dnf install python3 gcc python3-devel -y &>>$LOG_FILE
+VALIDATE $? "installing python3" 
 
 # checking use exist or not
 id roboshop &>>$LOG_FILE
@@ -67,7 +54,8 @@ then
     VALIDATE $? "adding application user" 
 fi
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
+
+curl -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading application code" 
 
 cd /app 
@@ -76,37 +64,25 @@ VALIDATE $? "changing directory to app"
 rm -rf *
 VALIDATE $? "removing existing files in app"
 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
+unzip /tmp/payment.zip &>>$LOG_FILE
 VALIDATE $? "unzip applicaion code in /app"
 
-npm install  &>>$LOG_FILE
-VALIDATE $? "installing application dependencies"
 
-cp $INITIAL_REPO/catalogue.service /etc/systemd/system/catalogue.service
+pip3 install -r requirements.txt &>>$LOG_FILE
+VALIDATE $? "installing dependencies"
+
+cp $INITIAL_REPO/payment.service /etc/systemd/system/payment.service
 VALIDATE $? "adding service file"
+
 
 systemctl daemon-reload 
 VALIDATE $? "daemon-reload"
 
-systemctl enable catalogue 
-VALIDATE $? "enabling catalogue" 
+systemctl enable payment 
+VALIDATE $? "enabling payment" 
 
-systemctl start catalogue
-VALIDATE $? "starting catalogue"
-
-
-cp $INITIAL_REPO/mongo.repo /etc/yum.repos.d/mongo.repo 
-VALIDATE $? "setup mongoDB repo file" 
-
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "installing mongoDB" 
-
-
-mongosh --host mongodb.royalreddy.site </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "loading master date" 
-
-# mongosh --host mongodb.royalreddy.site
-# VALIDATE $? "connecting mongodb server" 
+systemctl start payment
+VALIDATE $? "starting payment"
 
 SHELL_END=$(date +%s)
 TOTEL=$((SHELL_END-SHELL_START))

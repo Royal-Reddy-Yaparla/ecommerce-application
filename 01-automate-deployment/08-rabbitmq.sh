@@ -3,9 +3,9 @@ SHELL_START=$(date +%s)
 
 #############################################################################
 # Author: ROYAL 
-# Date: 21-05-2025
+# Date: 22-05-2025
 # Version: v1
-# Purpose: Automate mongodb configuration
+# Purpose: Automate rabbitmq configuration
 #############################################################################
 
 
@@ -15,9 +15,8 @@ Y="\e[33m"
 N="\e[0m"
 
 echo -e "scripted stated at::$Y $(date) $N"
-
 USER_ID=$(id -u)
-
+INITIAL_REPO=$PWD 
 # logs setup
 LOG_REPO="/var/log/ecommerce-app"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
@@ -32,6 +31,9 @@ then
     exit 1
 fi
 
+echo "Please enter rabbitmq password to setup"
+read -s RABBITMQ_PASSWD
+
 # Validate command
 VALIDATE(){
     if [ $1 -eq 0 ]
@@ -43,34 +45,21 @@ VALIDATE(){
     fi    
 }
 
+cp $INITIAL_REPO/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
+VALIDATE $? "coping rabbitmq repo file" 
 
+dnf install rabbitmq-server -y &>>$LOG_FILE
+VALIDATE $? "installing rabbitmq"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo 
-VALIDATE $? "setup mongoDB repo file" 
+systemctl enable rabbitmq-server &>>$LOG_FILE
+VALIDATE $? "enabling rabbitmq"
 
-# dnf list installed mongodb &>>$LOG_FILE
-# VALIDATE $? "installing mongoDB"  
+systemctl start rabbitmq-server &>>$LOG_FILE
+VALIDATE $? "starting rabbitmq"
 
-# if [ $? -eq 0 ]
-# then 
-#     echo -e "$Y mongodb already installed $N"  | tee -a $LOG_FILE
-#     exit 1
-# fi
+rabbitmqctl add_user roboshop $RABBITMQ_PASSWD &>>$LOG_FILE
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOG_FILE
 
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "installing mongoDB" 
-
-systemctl enable mongod &>>$LOG_FILE
-VALIDATE $? "enabling mongoDB" 
-
-systemctl start mongod &>>$LOG_FILE
-VALIDATE $? "starting mongoDB"
-
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
-VALIDATE $? "updating listen address" 
-
-systemctl restart mongod &>>$LOG_FILE
-VALIDATE $? "restarting mongoDB"
 
 SHELL_END=$(date +%s)
 TOTEL=$((SHELL_END-SHELL_START))
