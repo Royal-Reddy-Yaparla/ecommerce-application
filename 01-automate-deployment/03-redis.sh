@@ -19,7 +19,8 @@ USER_ID=$(id -u)
 
 # logs setup
 LOG_REPO="/var/log/ecommerce-app"
-LOG_FILE="$LOG_REPO/redis.log"
+SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
+LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
 
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
 
