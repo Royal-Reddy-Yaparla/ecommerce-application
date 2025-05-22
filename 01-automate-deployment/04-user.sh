@@ -63,7 +63,7 @@ fi
 mkdir -p /app 
 VALIDATE $? "adding app repo" 
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
+curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading application code" 
 
 cd /app 
