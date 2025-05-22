@@ -16,7 +16,7 @@ N="\e[0m"
 
 echo -e "scripted stated at::$Y $(date) $N"
 USER_ID=$(id -u)
-
+INITIAL_REPO=$PWD 
 # logs setup
 LOG_REPO="/var/log/ecommerce-app"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
