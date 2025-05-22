@@ -3,9 +3,9 @@ SHELL_START=$(date +%s)
 
 #############################################################################
 # Author: ROYAL 
-# Date: 21-05-2025
+# Date: 22-05-2025
 # Version: v1
-# Purpose: Automate mongodb configuration
+# Purpose: Automate redis configuration
 #############################################################################
 
 
@@ -15,12 +15,11 @@ Y="\e[33m"
 N="\e[0m"
 
 echo -e "scripted stated at::$Y $(date) $N"
-
 USER_ID=$(id -u)
 
 # logs setup
 LOG_REPO="/var/log/ecommerce-app"
-LOG_FILE="$LOG_REPO/mongodb.log"
+LOG_FILE="$LOG_REPO/redis.log"
 
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
 
@@ -42,35 +41,27 @@ VALIDATE(){
 }
 
 
-mkdir -p "$LOG_REPO"
-VALIDATE $? "creating log repo"
+dnf module disable redis -y &>>$LOG_FILE
+VALIDATE $? "disabling default redis package"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo 
-VALIDATE $? "setup mongoDB repo file" 
 
-# dnf list installed mongodb &>>$LOG_FILE
-# VALIDATE $? "installing mongoDB"  
+dnf module enable redis:7 -y &>>$LOG_FILE
+VALIDATE $? "enabling redis:7 package" 
 
-# if [ $? -eq 0 ]
-# then 
-#     echo -e "$Y mongodb already installed $N"  | tee -a $LOG_FILE
-#     exit 1
-# fi
+dnf install redis -y &>>$LOG_FILE
+VALIDATE $? "installing redis" 
 
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "installing mongoDB" 
 
-systemctl enable mongod &>>$LOG_FILE
-VALIDATE $? "enabling mongoDB" 
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf &>>$LOG_FILE
+VALIDATE $? "updating listen address"
 
-systemctl start mongod &>>$LOG_FILE
-VALIDATE $? "starting mongoDB"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
-VALIDATE $? "updating listen address" 
+systemctl enable redis 
+VALIDATE $? "enabling redis" 
 
-systemctl restart mongod &>>$LOG_FILE
-VALIDATE $? "restarting mongoDB"
+systemctl start redis 
+VALIDATE $? "starting redis"
+
 
 SHELL_END=$(date +%s)
 TOTEL=$((SHELL_END-SHELL_START))

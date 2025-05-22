@@ -1,4 +1,5 @@
 #!/bin/bash
+SHELL_START=$(date +%s)
 
 #############################################################################
 # Author: ROYAL 
@@ -13,6 +14,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
+echo -e "scripted stated at::$Y $(date) $N"
 USER_ID=$(id -u)
 
 # logs setup
@@ -99,4 +101,6 @@ do
 done
 
 
-
+SHELL_END=$(date +%s)
+TOTEL=$((SHELL_END-SHELL_START))
+echo -e "time taken for script execution: $Y $TOTEL seconds $N"

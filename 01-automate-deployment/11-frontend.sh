@@ -1,4 +1,6 @@
 #!/bin/bash
+SHELL_START=$(date +%s)
+
 
 #############################################################################
 # Author: ROYAL 
@@ -12,6 +14,8 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+echo -e "scripted stated at::$Y $(date) $N"
+
 INITIAL_REPO=$PWD
 
 USER_ID=$(id -u)
@@ -76,3 +80,7 @@ VALIDATE $? "coping config file"
 
 systemctl restart nginx 
 VALIDATE $? "restarting nginx service" 
+
+SHELL_END=$(date +%s)
+TOTEL=$((SHELL_END-SHELL_START))
+echo -e "time taken for script execution: $Y $TOTEL seconds $N"
