@@ -51,6 +51,8 @@ VALIDATE $? "enabling nodejs:20 package"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "installing nodejs" 
 
+mkdir -p /app 
+
 # checking use exist or not
 id roboshop &>>$LOG_FILE
 

@@ -48,7 +48,7 @@ VALIDATE(){
 dnf install maven -y &>>$LOG_FILE
 VALIDATE $? "installing maven"
 
-
+mkdir -p /app 
 # checking use exist or not
 id roboshop &>>$LOG_FILE
 

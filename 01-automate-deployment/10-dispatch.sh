@@ -45,7 +45,7 @@ VALIDATE(){
 dnf install golang -y &>>$LOG_FILE
 VALIDATE $? "installing golang"
 
-
+mkdir -p /app 
 # checking use exist or not
 id roboshop &>>$LOG_FILE
 
