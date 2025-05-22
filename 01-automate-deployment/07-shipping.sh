@@ -76,6 +76,9 @@ VALIDATE $? "mavan build and package"
 mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
 VALIDATE $? "renaming package"
 
+cp $INITIAL_REPO/shipping.service /etc/systemd/system/shipping.service
+VALIDATE $? "adding service file"
+
 
 systemctl daemon-reload
 VALIDATE $? "daemon-reload"
