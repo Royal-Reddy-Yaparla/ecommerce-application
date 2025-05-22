@@ -60,7 +60,7 @@ dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "installing nodejs" 
 
 # checking use exist or not
-id roboshop 
+id roboshop &>>$LOG_FILE
 
 if [ $? -ne 0 ]
 then 
