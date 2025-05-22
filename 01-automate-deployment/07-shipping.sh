@@ -71,10 +71,10 @@ unzip /tmp/shipping.zip &>>$LOG_FILE
 VALIDATE $? "unzip applicaion code in /app"
 
 mvn clean package &>>$LOG_FILE
-VALIDATE() $? "mavan build and package"
+VALIDATE $? "mavan build and package"
 
 mv $INITIAL_REPO/target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
-VALIDATE() $? "renaming package"
+VALIDATE $? "renaming package"
 
 
 systemctl daemon-reload
