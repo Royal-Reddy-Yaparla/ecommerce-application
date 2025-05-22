@@ -73,7 +73,7 @@ VALIDATE $? "unzip applicaion code in /app"
 mvn clean package &>>$LOG_FILE
 VALIDATE $? "mavan build and package"
 
-mv /target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
+mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
 VALIDATE $? "renaming package"
 
 
