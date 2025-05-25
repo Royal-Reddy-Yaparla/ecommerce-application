@@ -73,6 +73,18 @@ nodejs_installation(){
     VALIDATE $? "installing nodejs" 
 }
 
+maven_installation(){
+
+}
+
+python_installation(){
+
+}
+
+golang_installation(){
+    
+}
+
 app_code_download(){
     curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/$1-v3.zip &>>$LOG_FILE
     VALIDATE $? "downloading application code" 
@@ -83,6 +95,6 @@ app_code_download(){
     rm -rf *
     VALIDATE $? "removing existing files in app"
 
-    unzip /tmp/catalogue.zip &>>$LOG_FILE
+    unzip /tmp/$1.zip &>>$LOG_FILE
     VALIDATE $? "unzip applicaion code in /app"
 }

@@ -9,7 +9,7 @@ SHELL_START=$(date +%s)
 # update: optimize shell-script as part common script developed
 #############################################################################
 
-
+COMPONENT="catalogue"
 source ./common-script.sh
 
 # nodejs configuration
@@ -19,7 +19,7 @@ nodejs_installation
 app_user
 
 # download application code
-app_code_download catalogue
+app_code_download $COMPONENT
 
 npm install  &>>$LOG_FILE
 VALIDATE $? "installing application dependencies"
