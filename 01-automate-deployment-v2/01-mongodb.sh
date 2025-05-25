@@ -4,46 +4,13 @@ SHELL_START=$(date +%s)
 #############################################################################
 # Author: ROYAL 
 # Date: 21-05-2025
-# Version: v1
+# Version: v2
 # Purpose: Automate mongodb configuration
+# v2-update: optimize shell-script as part common script developed
 #############################################################################
 
 
-R="\e[31m"
-G="\e[32m"
-Y="\e[33m"
-N="\e[0m"
-
-echo -e "scripted stated at::$Y $(date) $N"
-
-USER_ID=$(id -u)
-
-# logs setup
-LOG_REPO="/var/log/ecommerce-app"
-SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
-
-mkdir -p "$LOG_REPO"
-echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
-
-if [ $USER_ID -ne 0 ]
-then
-    echo -e "$R ERROR: need to provide sudo user access $N"
-    exit 1
-fi
-
-# Validate command
-VALIDATE(){
-    if [ $1 -eq 0 ]
-    then
-        echo -e "$2 is $G Success $N"  | tee -a $LOG_FILE
-    else
-        echo -e "$2 is $G Failed $N"  | tee -a $LOG_FILE
-        exit 1 
-    fi    
-}
-
-
+source ./common-script.sh
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo 
 VALIDATE $? "setup mongoDB repo file" 
@@ -73,5 +40,8 @@ systemctl restart mongod &>>$LOG_FILE
 VALIDATE $? "restarting mongoDB"
 
 SHELL_END=$(date +%s)
-TOTEL=$((SHELL_END-SHELL_START))
-echo -e "time taken for script execution: $Y $TOTEL seconds $N"
+time_taken $SHELL_END
+
+# SHELL_END=$(date +%s)
+# TOTEL=$((SHELL_END-SHELL_START))
+# echo -e "time taken for script execution: $Y $TOTEL seconds $N"
