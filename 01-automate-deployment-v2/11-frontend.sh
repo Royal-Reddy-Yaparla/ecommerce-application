@@ -34,7 +34,15 @@ rm -rf /usr/share/nginx/html/*  &>>$LOG_FILE
 VALIDATE $? "removing nginx default files"
 
 # download application code
-app_code_download $COMPONENT
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+VALIDATE $? "downloading application code" 
+
+cd /usr/share/nginx/html 
+VALIDATE $? "changing repo to /usr/share/nginx/html " 
+
+unzip /tmp/frontend.zip &>>$LOG_FILE
+VALIDATE $? "unzipping application code" 
+
 
 cp $INITIAL_REPO/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "coping config file" 
