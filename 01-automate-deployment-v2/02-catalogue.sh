@@ -2,11 +2,20 @@
 SHELL_START=$(date +%s)
 
 #############################################################################
-# Author: ROYAL 
-# Date: 25-05-2025
-# Version: v2
-# Purpose: Automate user-component configuration
-# update: optimize shell-script as part common script developed
+# Script Name: catalogue.sh
+# Managed By: Royal Reddy
+# Date: 2025-05-25
+# Version: 2.0
+# Purpose: Automates configuration and deployment of the catalogue component
+# Description: Configures mongodb connectivity, updates service files, and validates catalogue service
+# Author: Royal Reddy
+# Changelog:
+#   - v1.0 (2025-05-21): Initial script for catalogue component setup
+#   - v2.0 (2025-05-25): Optimized for common script integration, added error handling
+# Notes:
+#   - Ensure MongoDB Route53 record is updated before execution
+#   - Run as root or with sudo privileges
+# Usage: sudo sh catalogue.sh
 #############################################################################
 
 COMPONENT="catalogue"

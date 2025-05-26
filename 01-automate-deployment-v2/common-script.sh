@@ -2,7 +2,7 @@
 SHELL_START=$(date +%s)
 
 #############################################################################
-# Author: ROYAL 
+# Managed_By: ROYAL 
 # Date: 21-05-2025
 # Version: v1
 # Purpose: common script all components
@@ -74,15 +74,29 @@ nodejs_installation(){
 }
 
 maven_installation(){
-
+    dnf install maven -y &>>$LOG_FILE
+    ALIDATE $? "installing maven"
 }
 
 python_installation(){
-
+    dnf install python3 gcc python3-devel -y &>>$LOG_FILE
+    VALIDATE $? "installing python3" 
 }
 
 golang_installation(){
-    
+    dnf install golang -y &>>$LOG_FILE
+    VALIDATE $? "installing golang"
+}
+
+nginx_installation(){
+    dnf module disable nginx -y &>>$LOG_FILE
+    VALIDATE $? "disabling default nginx package" 
+
+    dnf module enable nginx:1.24 -y &>>$LOG_FILE
+    VALIDATE $? "enabling nginx:1.24 package" 
+
+    dnf install nginx -y &>>$LOG_FILE
+    VALIDATE $? "installing default nginx package" 
 }
 
 app_code_download(){

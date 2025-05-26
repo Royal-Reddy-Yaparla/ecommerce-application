@@ -2,7 +2,7 @@
 SHELL_START=$(date +%s)
 
 #############################################################################
-# Author: ROYAL 
+# Managed_By: ROYAL 
 # Date: 20-05
 # Version: v1
 # Purpose: Automate the process of creating EC2 instances and Route53 records

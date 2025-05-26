@@ -3,7 +3,7 @@ SHELL_START=$(date +%s)
 
 
 #############################################################################
-# Author: ROYAL 
+# Managed_By: ROYAL 
 # Date: 21-05-2025
 # Version: v1
 # Purpose: Automate frontend configuration

@@ -2,73 +2,32 @@
 SHELL_START=$(date +%s)
 
 #############################################################################
-# Author: ROYAL 
-# Date: 22-05-2025
-# Version: v1
-# Purpose: Automate shipping-component configuration
+# Script Name: shipping.sh
+# Managed By: Royal Reddy
+# Date: 2025-05-25
+# Version: 2.0
+# Purpose: Automates configuration and deployment of the shipping component
+# Description: Configures mysql connectivity, updates service files, and validates shipping service
+# Author: Royal Reddy
+# Changelog:
+#   - v1.0 (2025-05-21): Initial script for shipping component setup
+#   - v2.0 (2025-05-25): Optimized for common script integration, added error handling
+# Notes:
+#   - Ensure shipping Route53 record is updated before execution
+#   - Run as root or with sudo privileges
+# Usage: sudo sh shipping.sh
 #############################################################################
+COMPONENT="shipping"
+source ./common-script.sh
 
+# java and maven configuration
+maven_installation
 
-R="\e[31m"
-G="\e[32m"
-Y="\e[33m"
-N="\e[0m"
+# create app's repo and user
+app_user
 
-echo -e "scripted stated at::$Y $(date) $N"
-USER_ID=$(id -u)
-INITIAL_REPO=$PWD 
-# logs setup
-LOG_REPO="/var/log/ecommerce-app"
-SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
-
-mkdir -p "$LOG_REPO"
-echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
-
-echo "Please enter root password to setup"
-read -s MYSQL_ROOT_PASSWORD
-
-if [ $USER_ID -ne 0 ]
-then
-    echo -e "$R ERROR: need to provide sudo user access $N"
-    exit 1
-fi
-
-# Validate command
-VALIDATE(){
-    if [ $1 -eq 0 ]
-    then
-        echo -e "$2 is $G Success $N"  | tee -a $LOG_FILE
-    else
-        echo -e "$2 is $G Failed $N"  | tee -a $LOG_FILE
-        exit 1 
-    fi    
-}
-
-dnf install maven -y &>>$LOG_FILE
-VALIDATE $? "installing maven"
-
-mkdir -p /app 
-# checking use exist or not
-id roboshop &>>$LOG_FILE
-
-if [ $? -ne 0 ]
-then 
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-    VALIDATE $? "adding application user" 
-fi
-
-curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>$LOG_FILE
-VALIDATE $? "downloading application code" 
-
-cd /app 
-VALIDATE $? "changing directory to app"
-
-rm -rf *
-VALIDATE $? "removing existing files in app"
-
-unzip /tmp/shipping.zip &>>$LOG_FILE
-VALIDATE $? "unzip applicaion code in /app"
+# download application code
+app_code_download $COMPONENT
 
 mvn clean package &>>$LOG_FILE
 VALIDATE $? "mavan build and package"
@@ -110,5 +69,4 @@ systemctl restart shipping &>>$LOG_FILE
 VALIDATE $? "Restart shipping"
 
 SHELL_END=$(date +%s)
-TOTEL=$((SHELL_END-SHELL_START))
-echo -e "time taken for script execution: $Y $TOTEL seconds $N"
+time_taken $SHELL_END

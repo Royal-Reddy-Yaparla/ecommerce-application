@@ -1,59 +1,28 @@
 #!/bin/bash
 SHELL_START=$(date +%s)
 
-
 #############################################################################
-# Author: ROYAL 
-# Date: 21-05-2025
-# Version: v1
-# Purpose: Automate frontend configuration
+# Script Name: frontend.sh
+# Managed By: Royal Reddy
+# Date: 2025-05-25
+# Version: 2.0
+# Purpose: Automates configuration and deployment of the frontend component
+# Description: pdates service files, and validates frontend service
+# Author: Royal Reddy
+# Changelog:
+#   - v1.0 (2025-05-21): Initial script for frontend component setup
+#   - v2.0 (2025-05-25): Optimized for common script integration, added error handling
+# Notes:
+#   - Ensure frontend Route53 record is updated before execution
+#   - Run as root or with sudo privileges
+# Usage: sudo sh frontend.sh
 #############################################################################
 
 
-R="\e[31m"
-G="\e[32m"
-Y="\e[33m"
-N="\e[0m"
-echo -e "scripted stated at::$Y $(date) $N"
+COMPONENT="frontend"
+source ./common-script.sh
 
-INITIAL_REPO=$PWD
-
-USER_ID=$(id -u)
-
-# logs setup
-LOG_REPO="/var/log/ecommerce-app"
-SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
-
-mkdir -p "$LOG_REPO"
-echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
-
-if [ $USER_ID -ne 0 ]
-then
-    echo -e "$R ERROR: need to provide sudo user access $N"
-    exit 1
-fi
-
-# Validate command
-VALIDATE(){
-    if [ $1 -eq 0 ]
-    then
-        echo -e "$2 is $G Success $N"  | tee -a $LOG_FILE
-    else
-        echo -e "$2 is $G Failed $N"  | tee -a $LOG_FILE
-        exit 1 
-    fi    
-}
-
-
-dnf module disable nginx -y &>>$LOG_FILE
-VALIDATE $? "disabling default nginx package" 
-
-dnf module enable nginx:1.24 -y &>>$LOG_FILE
-VALIDATE $? "enabling nginx:1.24 package" 
-
-dnf install nginx -y &>>$LOG_FILE
-VALIDATE $? "installing default nginx package" 
+nginx_installation
 
 systemctl enable nginx 
 VALIDATE $? "enabling nginx" 
@@ -64,15 +33,8 @@ VALIDATE $? "starting nginx"
 rm -rf /usr/share/nginx/html/*  &>>$LOG_FILE
 VALIDATE $? "removing nginx default files"
 
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
-VALIDATE $? "downloading application code" 
-
-cd /usr/share/nginx/html 
-VALIDATE $? "changing repo to /usr/share/nginx/html " 
-
-unzip /tmp/frontend.zip &>>$LOG_FILE
-VALIDATE $? "unzipping application code" 
-
+# download application code
+app_code_download $COMPONENT
 
 cp $INITIAL_REPO/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "coping config file" 
@@ -81,5 +43,4 @@ systemctl restart nginx
 VALIDATE $? "restarting nginx service" 
 
 SHELL_END=$(date +%s)
-TOTEL=$((SHELL_END-SHELL_START))
-echo -e "time taken for script execution: $Y $TOTEL seconds $N"
+time_taken $SHELL_END
