@@ -100,7 +100,7 @@ nginx_installation(){
 }
 
 app_code_download(){
-    curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/$1-v3.zip &>>$LOG_FILE
+    curl -o /tmp/$1.zip https://roboshop-artifacts.s3.amazonaws.com/$1-v3.zip &>>$LOG_FILE
     VALIDATE $? "downloading application code" 
 
     cd /app 
