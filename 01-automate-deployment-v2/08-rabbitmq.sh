@@ -20,6 +20,9 @@ SHELL_START=$(date +%s)
 
 source ./common-script.sh
 
+echo "Please enter rabbitmq password to setup"
+read -s RABBITMQ_PASSWD
+
 cp $INITIAL_REPO/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
 VALIDATE $? "coping rabbitmq repo file" 
 
