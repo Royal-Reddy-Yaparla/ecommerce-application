@@ -20,6 +20,9 @@ SHELL_START=$(date +%s)
 COMPONENT="shipping"
 source ./common-script.sh
 
+echo "Please enter root password to setup"
+read -s MYSQL_ROOT_PASSWORD
+
 # java and maven configuration
 maven_installation
 

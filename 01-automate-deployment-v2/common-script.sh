@@ -75,7 +75,7 @@ nodejs_installation(){
 
 maven_installation(){
     dnf install maven -y &>>$LOG_FILE
-    ALIDATE $? "installing maven"
+    VALIDATE $? "installing maven"
 }
 
 python_installation(){
