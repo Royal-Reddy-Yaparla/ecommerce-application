@@ -1,3 +1,4 @@
+
 #!/bin/bash
 SHELL_START=$(date +%s)
 
@@ -26,6 +27,8 @@ LOG_FILE="$LOG_REPO/$SCRIPT_NAME.log"
 mkdir -p "$LOG_REPO"
 echo -e "script is started execution at $G $(date) $N"  | tee -a $LOG_FILE
 
+
+# Check root access to script
 check_root(){
     if [ $USER_ID -ne 0 ]
     then
@@ -34,7 +37,7 @@ check_root(){
     fi
 }
 
-# Validate command
+# validate 
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
@@ -45,11 +48,13 @@ VALIDATE(){
     fi    
 }
 
+# time calculate
 time_taken(){
     TOTEL=$(($1 -SHELL_START))
     echo -e "time taken for script execution: $Y $TOTEL seconds $N"
 }
 
+# add application user
 app_user(){
     mkdir -p /app 
     # checking use exist or not
@@ -62,6 +67,7 @@ app_user(){
     fi
 }
 
+# nodejs installtion
 nodejs_installation(){
     dnf module disable nodejs -y &>>$LOG_FILE
     VALIDATE $? "disabling default nodejs package" 
@@ -73,21 +79,25 @@ nodejs_installation(){
     VALIDATE $? "installing nodejs" 
 }
 
+# maven installtion
 maven_installation(){
     dnf install maven -y &>>$LOG_FILE
     VALIDATE $? "installing maven"
 }
 
+# python installtion
 python_installation(){
     dnf install python3 gcc python3-devel -y &>>$LOG_FILE
     VALIDATE $? "installing python3" 
 }
 
+# golang installtion
 golang_installation(){
     dnf install golang -y &>>$LOG_FILE
     VALIDATE $? "installing golang"
 }
 
+# nginx installtion
 nginx_installation(){
     dnf module disable nginx -y &>>$LOG_FILE
     VALIDATE $? "disabling default nginx package" 
@@ -99,6 +109,8 @@ nginx_installation(){
     VALIDATE $? "installing default nginx package" 
 }
 
+
+# application download 
 app_code_download(){
     curl -o /tmp/$1.zip https://roboshop-artifacts.s3.amazonaws.com/$1-v3.zip &>>$LOG_FILE
     VALIDATE $? "downloading application code" 

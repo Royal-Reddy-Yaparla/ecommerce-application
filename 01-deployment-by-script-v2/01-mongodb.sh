@@ -19,26 +19,33 @@ SHELL_START=$(date +%s)
 #############################################################################
 
 
+# calling comman script
 source ./common-script.sh
 
+# adding mongodb repo
 cp mongo.repo /etc/yum.repos.d/mongo.repo 
 VALIDATE $? "setup mongoDB repo file" 
 
-
+# install mongodb
 dnf install mongodb-org -y &>>$LOG_FILE
 VALIDATE $? "installing mongoDB" 
 
+# enable service
 systemctl enable mongod &>>$LOG_FILE
 VALIDATE $? "enabling mongoDB" 
 
+# start service
 systemctl start mongod &>>$LOG_FILE
 VALIDATE $? "starting mongoDB"
 
+# updateing listening addresss from internal to external
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
 VALIDATE $? "updating listen address" 
 
+# restart service
 systemctl restart mongod &>>$LOG_FILE
 VALIDATE $? "restarting mongoDB"
 
+# count time-taken
 SHELL_END=$(date +%s)
 time_taken $SHELL_END
