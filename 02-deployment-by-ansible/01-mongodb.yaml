@@ -8,7 +8,7 @@
       dest: /etc/yum.repos.d/mongo.repo
   
   - name: Install mongodb
-    ansible.builtin.shell: "dnf install mongodb-org -y"
+    ansible.builtin.command: "dnf install mongodb-org -y"
 
   - name: Start service mongod, if not started
     ansible.builtin.service:
