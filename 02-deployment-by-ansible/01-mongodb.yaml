@@ -10,21 +10,21 @@
   - name: Install mongodb
     ansible.builtin.shell: "dnf install mongodb-org -y"
 
-# - name: Start service mongod, if not started
-#   ansible.builtin.service:
-#     name: mongod
-#     state: started
-#     enabled: true
+- name: Start service mongod, if not started
+  ansible.builtin.service:
+    name: mongod
+    state: started
+    enabled: true
     
-# - name: update listen address from 127.0.0.1 to 0.0.0.0
-#   ansible.builtin.replace:
-#     path: /etc/mongod.conf
-#     regexp: '127.0.0.1'
-#     replace: '0.0.0.0'
+- name: update listen address from 127.0.0.1 to 0.0.0.0
+  ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'
 
-# - name: restart service mongod
-#   ansible.builtin.service:
-#     name: mongod
-#     state: restarted
+- name: restart service mongod
+  ansible.builtin.service:
+    name: mongod
+    state: restarted
 
     
