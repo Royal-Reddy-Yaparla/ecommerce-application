@@ -2,15 +2,15 @@
   hosts: mongodb
   become: yes
   tasks:
-  - name: Copy file mongo-package repo
+  - name: copy file mongo-package repo
     ansible.builtin.copy:
       src: mongo.repo
       dest: /etc/yum.repos.d/mongo.repo
   
-  - name: Install mongodb
+  - name: install mongodb
     ansible.builtin.command: "dnf install mongodb-org -y"
 
-  - name: Start service mongod, if not started
+  - name: start service mongod, if not started
     ansible.builtin.service:
       name: mongod
       state: started
@@ -26,5 +26,13 @@
     ansible.builtin.service:
       name: mongod
       state: restarted
+
+  - name: check mongod version
+    ansible.builtin.command: "mongod --version"
+    register: mongod_version 
+
+  - name: print mongod_version
+    ansible.builtin.debug: 
+      msg: "{{ mongod_version }}"
 
     
