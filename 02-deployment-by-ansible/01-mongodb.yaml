@@ -7,15 +7,25 @@
       src: mongo.repo
       dest: /etc/yum.repos.d/mongo.repo
   
-  - name: install mongodb
-    ansible.builtin.command: "dnf install mongodb-org -y"
+  - name: Install mongodb server
+    ansible.builtin.dnf:
+      name: mongodb-org
+      state: present
 
   - name: start service mongod, if not started
     ansible.builtin.service:
       name: mongod
       state: started
       enabled: true
-      
+
+  - name: Check mongod version
+    ansible.builtin.command: "mongod --version"
+    register: mongod_version
+
+  - name: Print raw output
+    ansible.builtin.debug:
+      msg: "{{ mongod_version.stdout_lines }}"
+        
   - name: update listen address from 127.0.0.1 to 0.0.0.0
     ansible.builtin.replace:
       path: /etc/mongod.conf
@@ -27,11 +37,4 @@
       name: mongod
       state: restarted
 
-  - name: Check mongod version
-    ansible.builtin.command: "mongod --version"
-    register: mongod_version
-
-  - name: Print raw output
-    ansible.builtin.debug:
-      msg: "{{ mongod_version.stdout_lines }}"
-        
+  
