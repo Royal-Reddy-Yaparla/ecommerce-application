@@ -33,6 +33,6 @@
 
   - name: print mongod_version
     ansible.builtin.debug: 
-      msg: "{{ mongod_version.stdout }}"
+      msg: "{{ mongod_version.stdout.msg.version }}"
 
     
