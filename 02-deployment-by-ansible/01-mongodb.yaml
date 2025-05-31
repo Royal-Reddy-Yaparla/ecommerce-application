@@ -27,11 +27,12 @@
       name: mongod
       state: restarted
 
-  - name: Extract only MongoDB version (e.g., 7.0.20)
-    ansible.builtin.set_fact:
-      mongo_version: "{{ mongod_version.stdout | regex_search('(?<=db version v)([0-9\\.]+)', '\\1') }}"
+- name: Extract only MongoDB version (e.g., 7.0.20)
+  ansible.builtin.set_fact:
+    mongo_version: "{{ mongod_version.stdout | regex_search('(?<=db version v)([0-9\\.]+)', '\\1') }}"
+  when: mongod_version is defined and mongod_version.rc == 0
 
-  - name: Print extracted MongoDB version
-    ansible.builtin.debug:
-      msg: "MongoDB Version: {{ mongo_version }}"
+- name: Print extracted MongoDB version
+  ansible.builtin.debug:
+    msg: "MongoDB Version: {{ mongo_version }}"
       
