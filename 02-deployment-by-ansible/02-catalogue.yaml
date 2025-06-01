@@ -8,7 +8,7 @@
   - name: enable nodejs:20 module 
     ansible.builtin.command: "dnf module enable nodejs:20 -y"
 
-  - name: install nodejs server
+  - name: install nodejs 
     ansible.builtin.package:
       name: nodejs
       state: present
@@ -21,7 +21,7 @@
   - name: add the system user 'roboshop'
     ansible.builtin.user:
       name: roboshop
-      comment: roboshop system user
+      system: true # makes the user a system account.
       home : /app
       shell: /sbin/nologin
 
@@ -40,9 +40,8 @@
     # Ansible's unarchive module defaults to copying the file from the control machine (your local machine) to the remote machine unless you specify remote_src: true.
 
   - name: install dependecies
-    ansible.builtin.command: "npm install"
-    args:
-      chdir: /app
+    community.general.npm:
+      path: /app
   
   - name: copy service file to /etc/systemd/system/
     ansible.builtin.copy:
@@ -69,11 +68,11 @@
       name: mongodb-mongosh
       state: present
 
-  # - name: load master data with pseudo-idempotency
-  #   community.mongodb.mongodb_shell:
-  #     login_host: mongodb.royalreddy.site
-  #     file: "/app/db/master-data.js"
-  #     idempotent: yes
+  - name: check products loaded or not
+    ansible.builtin.command: mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+    register: catalogue_output
 
-  - name: disable current nodejs module 
-    ansible.builtin.shell: "mongosh --host mongodb.royalreddy.site </app/db/master-data.js"
+  - name: print catalogue output
+    ansible.builtin.debug:
+      msg: "{{ catalogue_output }}"
+
