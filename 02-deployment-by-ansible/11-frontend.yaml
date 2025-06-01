@@ -29,7 +29,7 @@
       url: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip 
       dest: /tmp/frontend.zip
 
-  - name: remove default nginx directory
+  - name: create default nginx directory
     ansible.builtin.file:
       path: /usr/share/nginx/html
       state: present
