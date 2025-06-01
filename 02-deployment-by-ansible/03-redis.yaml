@@ -1,4 +1,4 @@
-- name: redis configuratiion
+- name: redis configuration
   hosts: redis
   become: true 
   tasks:

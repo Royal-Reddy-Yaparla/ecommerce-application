@@ -1,4 +1,4 @@
-- name: catalogue component configuratiion
+- name: catalogue component configuration
   hosts: catalogue
   become: true 
   tasks:
