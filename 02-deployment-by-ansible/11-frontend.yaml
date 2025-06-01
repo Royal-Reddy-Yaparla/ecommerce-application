@@ -35,7 +35,7 @@
       state: directory
 
     
-  - name: extract application code /tmp/payment.zip
+  - name: extract application code /tmp/frontend.zip
     ansible.builtin.unarchive:
       src: /tmp/frontend.zip
       dest: /usr/share/nginx/html 
