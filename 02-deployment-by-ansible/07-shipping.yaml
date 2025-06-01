@@ -82,15 +82,15 @@
 
   - name: load products
     ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
-    when: data_output.stdout | int < 0
+    when: data_output.stdout | int < 1
 
   - name: load products
     ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/app-user.sql
-    when: data_output.stdout | int < 0
+    when: data_output.stdout | int < 1
 
   - name: load products
     ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/master-data.sql
-    when: data_output.stdout | int < 0
+    when: data_output.stdout | int < 1
 
   - name: start service shipping, if not started
     ansible.builtin.service:
