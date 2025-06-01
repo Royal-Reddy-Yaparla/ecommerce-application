@@ -36,18 +36,12 @@
   - name: download the dependencies & build the application  
     ansible.builtin.command: "mvn clean package"
     args:
-      chdir: /app/
+      chdir: /app
 
-  - name: copy service file to /app/target/shipping-1.0.jar
-    ansible.builtin.copy:
-      src: /app/target/shipping-1.0.jar
-      dest: /app/target/shipping.jar
-      remote_src: true
-
-  - name: remove the shipping-1.0.jar file
-    ansible.builtin.file:
-      path: /app/target/shipping-1.0.jar
-      state: absent
+  - name: rename jar file
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
+    args:
+      chdir: /app
 
   - name: copy service file to /etc/systemd/system/
     ansible.builtin.copy:
