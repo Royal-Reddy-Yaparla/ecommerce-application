@@ -72,7 +72,7 @@
 
   # check data is loaded or not 
   - name: check data is loaded or not
-    ansible.builtin.command:ansible.builtin.command:  mysql -h mysql.royalreddy.site -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
+    ansible.builtin.command:  mysql -h mysql.royalreddy.site -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
     register: data_output
 
   - name: print data output
