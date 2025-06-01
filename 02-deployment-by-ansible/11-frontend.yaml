@@ -2,13 +2,13 @@
   hosts: frontend
   become: true 
   tasks:
-  - name: disable current nodejs module 
+  - name: disable current nginx module 
     ansible.builtin.command: "dnf module disable nginx -y"
 
-  - name: enable nodejs:20 module 
+  - name: enable nginx:1.24 module 
     ansible.builtin.command: "dnf module enable nginx:1.24 -y"
 
-  - name: install nodejs 
+  - name: install nginx 
     ansible.builtin.package:
       name: nginx 
       state: present
@@ -32,7 +32,8 @@
   - name: create default nginx directory
     ansible.builtin.file:
       path: /usr/share/nginx/html
-      state: present
+      state: directory
+
     
   - name: extract application code /tmp/payment.zip
     ansible.builtin.unarchive:
