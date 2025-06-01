@@ -36,7 +36,7 @@
   - name: download the dependencies & build the application  
     ansible.builtin.command: "mvn clean package"
     args:
-      chdir: app/
+      chdir: /app/
 
   - name: copy service file to /etc/systemd/system/
     ansible.builtin.copy:
