@@ -72,7 +72,7 @@
 
   # check data is loaded or not 
   - name: check data is loaded or not
-    ansible.builtin.command: mysql -h mysql.royalreddy.site -u root -p{{ mysql_password }} -e 'use cities' 
+    ansible.builtin.command:ansible.builtin.command:  mysql -h mysql.royalreddy.site -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
     register: data_output
 
   - name: print data output
@@ -81,15 +81,15 @@
 
 
   - name: load products
-    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
+    ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
     when: data_output.stdout | int < 0
 
   - name: load products
-    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p{{ mysql_password }} < /app/db/app-user.sql
+    ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/app-user.sql
     when: data_output.stdout | int < 0
 
   - name: load products
-    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p{{ mysql_password }} < /app/db/master-data.sql
+    ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/master-data.sql
     when: data_output.stdout | int < 0
 
   - name: start service shipping, if not started
