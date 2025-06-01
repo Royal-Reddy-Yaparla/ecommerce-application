@@ -33,7 +33,7 @@
   - name: extract application code /tmp/catalogue.zip
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
-      dest: /app/catalogue
+      dest: /app/
       remote_src: true
 
       
