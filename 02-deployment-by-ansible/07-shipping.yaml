@@ -43,7 +43,7 @@
       src: /app/target/shipping-1.0.jar
       dest: /app/target/shipping.jar
       remote_src: true
-      
+
   - name: remove the shipping-1.0.jar file
     ansible.builtin.file:
       path: /app/target/shipping-1.0.jar
@@ -81,15 +81,15 @@
 
 
   - name: load products
-    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p${{ mysql_password }} < /app/db/schema.sql
+    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
     when: data_output.stdout | int < 0
 
   - name: load products
-    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p${{ mysql_password }} < /app/db/app-user.sql
+    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p{{ mysql_password }} < /app/db/app-user.sql
     when: data_output.stdout | int < 0
 
   - name: load products
-    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p${{ mysql_password }} < /app/db/master-data.sql
+    ansible.builtin.shell: mysql -h mysql.daws84s.site -uroot -p{{ mysql_password }} < /app/db/master-data.sql
     when: data_output.stdout | int < 0
 
   - name: start service shipping, if not started
