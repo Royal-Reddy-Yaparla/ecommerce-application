@@ -67,11 +67,11 @@
       name: mongodb-mongosh
       state: present
 
-  - name: load master data with pseudo-idempotency
-    community.mongodb.mongodb_shell:
-      login_host: mongodb.royalreddy.site
-      file: "/app/db/master-data.js"
-      idempotent: yes
+  # - name: load master data with pseudo-idempotency
+  #   community.mongodb.mongodb_shell:
+  #     login_host: mongodb.royalreddy.site
+  #     file: "/app/db/master-data.js"
+  #     idempotent: yes
 
   - name: disable current nodejs module 
     ansible.builtin.command: "mongosh --host mongodb.royalreddy.site </app/db/master-data.js"
