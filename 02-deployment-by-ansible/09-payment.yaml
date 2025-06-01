@@ -2,9 +2,9 @@
   hosts: payment
   become: true 
   tasks:
-  - name: install nodejs 
+  - name: install python3 
     ansible.builtin.package:
-      name: python3 gcc python3-devel
+      name: python3,gcc,python3-devel
       state: present
 
   - name: create a directory if it does not exist
