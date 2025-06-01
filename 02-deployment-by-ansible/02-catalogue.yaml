@@ -33,7 +33,7 @@
   - name: extract application code /tmp/catalogue.zip
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
-      dest: /app
+      dest: /app/catalogue
       
   - name: install dependecies
     ansible.builtin.command: "npm install"
