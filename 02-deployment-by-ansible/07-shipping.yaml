@@ -42,7 +42,8 @@
     ansible.builtin.copy:
       src: /app/target/shipping-1.0.jar
       dest: /app/target/shipping.jar
-  
+      remote_src: true
+      
   - name: remove the shipping-1.0.jar file
     ansible.builtin.file:
       path: /app/target/shipping-1.0.jar
@@ -52,7 +53,7 @@
     ansible.builtin.copy:
       src: shipping.service
       dest: /etc/systemd/system/shipping.service
-      remote_src: true
+      
 
   - name: load the service
     ansible.builtin.systemd_service:
