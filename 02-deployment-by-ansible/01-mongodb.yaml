@@ -18,11 +18,11 @@
       state: started
       enabled: true
 
-  - name: Check mongod version
+  - name: check mongod version
     ansible.builtin.command: "mongod --version"
     register: mongod_version
 
-  - name: Print raw output
+  - name: print mongo version
     ansible.builtin.debug:
       msg: "{{ mongod_version.stdout_lines }}"
         
