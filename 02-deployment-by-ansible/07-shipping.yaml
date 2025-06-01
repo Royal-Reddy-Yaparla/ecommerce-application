@@ -72,7 +72,7 @@
 
   # check data is loaded or not 
   - name: check data is loaded or not
-    ansible.builtin.command: mysql -h mysql.royalreddy.site -u root -p${{ mysql_password }} -e 'use cities' 
+    ansible.builtin.command: mysql -h mysql.royalreddy.site -u root -p{{ mysql_password }} -e 'use cities' 
     register: data_output
 
   - name: print data output
