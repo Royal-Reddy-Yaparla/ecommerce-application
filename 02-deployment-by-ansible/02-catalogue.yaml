@@ -1,5 +1,5 @@
 - name: catalogue component configuratiion
-  host: catalogue
+  hosts: catalogue
   become: true 
   tasks:
   - name: disable current nodejs module 
