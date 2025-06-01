@@ -39,3 +39,13 @@
       src: /tmp/frontend.zip
       dest: /usr/share/nginx/html 
       remote_src: true
+
+  - name: copy config file to /etc/nginx/
+    ansible.builtin.copy:
+      src: nginx.conf
+      dest: /etc/nginx/nginx.conf
+
+  - name: restart service nginx
+    ansible.builtin.service:
+      name: nginx
+      state: restarted
