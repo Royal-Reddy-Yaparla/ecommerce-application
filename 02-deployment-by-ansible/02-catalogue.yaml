@@ -1,0 +1,72 @@
+- name: catalogue component configuratiion
+  host: catalogue
+  become: true 
+  tasks:
+  - name: disable current nodejs module 
+    ansible.builtin.command: "dnf module disable nodejs -y"
+
+  - name: enable nodejs:20 module 
+    ansible.builtin.command: "dnf module enable nodejs:20 -y"
+
+  - name: install nodejs server
+    ansible.builtin.package:
+      name: nodejs
+      state: present
+
+  - name: create a directory if it does not exist
+    ansible.builtin.file:
+      path: /app
+      state: directory
+
+  - name: add the system user 'roboshop'
+    ansible.builtin.user:
+      name: roboshop
+      comment: roboshop system user
+      home : /app
+      shell: /sbin/nologin
+
+  - name: download application code
+    ansible.builtin.get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+      dest: /tmp/catalogue.zip
+    
+  - name: extract application code /tmp/catalogue.zip
+    ansible.builtin.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      
+  - name: install dependecies
+    ansible.builtin.command: "npm install"
+    args:
+      chdir: /app
+  
+  - name: copy service file to /etc/systemd/system/
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+    
+  - name: load the service
+    ansible.builtin.systemd_service:
+      daemon_reload: true
+
+  - name: start service catalogue, if not started
+    ansible.builtin.service:
+      name: catalogue
+      state: started
+      enabled: true
+
+  - name: copy file mongo-package repo
+    ansible.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+  
+  - name: Install mongodb server
+    ansible.builtin.package:
+      name: mongodb-mongosh
+      state: present
+
+  - name: load master data with pseudo-idempotency
+    community.mongodb.mongodb_shell:
+      login_host: mongodb.royalreddy.site
+      file: "/app/db/master-data.js"
+      idempotent: yes

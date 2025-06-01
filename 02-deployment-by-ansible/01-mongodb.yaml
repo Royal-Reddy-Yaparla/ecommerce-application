@@ -1,6 +1,6 @@
 - name: mongodb configuration
   hosts: mongodb
-  become: yes
+  become: true
   tasks:
   - name: copy file mongo-package repo
     ansible.builtin.copy:
@@ -8,7 +8,7 @@
       dest: /etc/yum.repos.d/mongo.repo
   
   - name: Install mongodb server
-    ansible.builtin.dnf:
+    ansible.builtin.package:
       name: mongodb-org
       state: present
 
