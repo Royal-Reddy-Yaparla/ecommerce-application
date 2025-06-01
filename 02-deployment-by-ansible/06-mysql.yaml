@@ -1,0 +1,21 @@
+- name: mysql-server configuration
+  hosts: mysql
+  become: true
+  vars_prompt:
+    - name: root_password
+      prompt: Enter root_password 
+
+  tasks:
+  - name: Install mysql server
+    ansible.builtin.package:
+      name: mysql-server
+      state: present
+
+  - name: start service mysql, if not started
+    ansible.builtin.service:
+      name: mysql
+      state: started
+      enabled: true
+    
+  - name: set default root root_password
+    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ root_password }}"
