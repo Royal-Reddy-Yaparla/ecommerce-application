@@ -18,3 +18,24 @@
       name: nginx
       state: started
       enabled: true
+
+  - name: remove default nginx directory
+    ansible.builtin.file:
+      path: /usr/share/nginx/html
+      state: absent
+
+  - name: download application code
+    ansible.builtin.get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip 
+      dest: /tmp/frontend.zip
+
+  - name: remove default nginx directory
+    ansible.builtin.file:
+      path: /usr/share/nginx/html
+      state: present
+    
+  - name: extract application code /tmp/payment.zip
+    ansible.builtin.unarchive:
+      src: /tmp/frontend.zip
+      dest: /usr/share/nginx/html 
+      remote_src: true
