@@ -20,10 +20,10 @@
       replace: '0.0.0.0'
 
   - name: update protected-mode to no
-    ansible.builtin.replace:
+    ansible.builtin.lineinfile:
       path: /etc/redis/redis.conf
-      regexp: 'protected-mode yes'
-      replace: 'protected-mode no'
+      regexp: 'protected-mode'
+      line: protected-mode no
 
   - name: start service mongod, if not started
     ansible.builtin.service:
