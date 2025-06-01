@@ -35,8 +35,10 @@
       src: /tmp/catalogue.zip
       dest: /app/
       remote_src: true
-
       
+    # Tell Ansible the file is already on the target node
+    # Ansible's unarchive module defaults to copying the file from the control machine (your local machine) to the remote machine unless you specify remote_src: true.
+
   - name: install dependecies
     ansible.builtin.command: "npm install"
     args:
@@ -74,4 +76,4 @@
   #     idempotent: yes
 
   - name: disable current nodejs module 
-    ansible.builtin.command: "mongosh --host mongodb.royalreddy.site </app/db/master-data.js"
+    ansible.builtin.shell: "mongosh --host mongodb.royalreddy.site </app/db/master-data.js"
