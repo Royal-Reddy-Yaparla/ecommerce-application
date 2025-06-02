@@ -77,7 +77,7 @@
   - name: check connection between mysql and app user (Shipping)
     community.mysql.mysql_info:
       login_user: shipping
-      login_password: {{ mysql_password }}
+      login_password: "{{ mysql_password }}"
       login_host : mysql.royalreddy.site
       login_db: cities
 
