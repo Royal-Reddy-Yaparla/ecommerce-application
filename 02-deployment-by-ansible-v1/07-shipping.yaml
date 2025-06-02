@@ -85,6 +85,17 @@
       login_host : mysql.royalreddy.site
       login_db: cities
 
+  - name: import the master data
+    community.mysql.mysql_db:
+      login_user: root
+      login_password: "{{ mysql_password }}"
+      login_host : mysql.royalreddy.site
+      name: all
+    loop:
+    - /app/db/schema.sql
+    - /app/db/app-user.sql 
+    - /app/db/master-data.sql
+
 # need to changes by modules
   # - name: load products
   #   ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
