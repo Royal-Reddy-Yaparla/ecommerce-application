@@ -57,6 +57,26 @@ VALIDATE(){
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
 aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=$1 --query Reservations[].Instances[].InstanceId --output text`
+
+    aws route53 change-resource-record-sets \
+        --hosted-zone-id $ZONE_ID \
+        --change-batch '
+        {
+            "Comment": "Creating or Updating a record set for cognito endpoint"
+            ,"Changes": [{
+                "Action"              : "DELETE"
+                ,"ResourceRecordSet"  : {
+                    "Name"              : "'$1'.royalreddy.site"
+                    ,"Type"             : "A"
+                    ,"TTL"              : 60
+                    ,"ResourceRecords"  : [{
+                        "Value"         : "'$IP'"
+                    }]
+                }
+            }]
+        }'
+
+
 # for instance in ${INSTANCES[@]}
 # for instance in $@
 # do 
