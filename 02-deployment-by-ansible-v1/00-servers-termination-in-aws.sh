@@ -3,9 +3,9 @@ SHELL_START=$(date +%s)
 
 #############################################################################
 # Managed_By: ROYAL 
-# Date: 20-05
+# Date: 02-06
 # Version: v1
-# Purpose: Automate the process of creating EC2 instances and Route53 records
+# Purpose: Automate the process of destroy EC2 instances and Route53 records
 #############################################################################
 
 
@@ -75,12 +75,6 @@ do
         --output text)
     fi
 
-
-    # IP=$(aws ec2 describe-instances \
-    # --filters "Name=tag:Name,Values=$instance" \
-    # --query "Reservations[].Instances[].PrivateIpAddress" \
-    # --output text)
-
     # Terminate EC2 instance
     aws ec2 terminate-instances --instance-ids $INSTANCE_ID
 
@@ -104,47 +98,6 @@ do
     }" | tee -a $LOG_FILE
 done
 
-# for instance in ${INSTANCES[@]}
-# for instance in $@
-# do 
-#     # ec2 provision
-#     INSTANCE_ID=$(aws ec2 run-instances \
-#         --image-id $AMI \
-#         --instance-type $INSTANCE_TYPE \
-#         --security-group-ids $SECURITY_GR_ID \
-#         --subnet-id $SUBNET_ID \
-#         --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value="'$instance'"}]' \
-#         --query 'Instances[*].InstanceId' \
-#         --output text)
-#     if [ $instance != "frontend" ]
-#     then
-#         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
-#         RECORD_NAME="'$instance.$DOMAIN_NAME'"
-#     else 
-#         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-#         RECORD_NAME="'$DOMAIN_NAME'"
-#     fi
-
-#     echo "$instance:: $IP"
-#     # route53 provision
-#     aws route53 change-resource-record-sets \
-#         --hosted-zone-id $ZONE_ID \
-#         --change-batch '
-#         {
-#             "Comment": "Creating or Updating a record set for cognito endpoint"
-#             ,"Changes": [{
-#                 "Action"              : "UPSERT"
-#                 ,"ResourceRecordSet"  : {
-#                     "Name"              : "'$instance'.royalreddy.site"
-#                     ,"Type"             : "A"
-#                     ,"TTL"              : 60
-#                     ,"ResourceRecords"  : [{
-#                         "Value"         : "'$IP'"
-#                     }]
-#                 }
-#             }]
-#         }' | tee -a $LOG_FILE
-# done
 
 
 SHELL_END=$(date +%s)

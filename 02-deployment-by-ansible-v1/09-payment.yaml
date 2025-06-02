@@ -4,8 +4,12 @@
   tasks:
   - name: install python3 
     ansible.builtin.package:
-      name: python3,gcc,python3-devel # use llop
+      name: "{{ item }}"
       state: present
+    loop:
+      - python3
+      - gcc
+      - python3-devel
 
   - name: create a directory if it does not exist
     ansible.builtin.file:
@@ -32,7 +36,10 @@
 
   - name: Install specified python requirements
     ansible.builtin.pip:
-      requirements: /app/requirements.txt # use arg and chdir
+      requirements: requirements.txt # use arg and chdir
+      executable: pip3.9
+    args: 
+      chdir: /app/
 
   - name: copy service file to /etc/systemd/system/
     ansible.builtin.copy:

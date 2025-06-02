@@ -73,20 +73,28 @@
     ansible.builtin.debug:
       msg: "{{ data_output }}"
 
+
+  - name: check connection between mysql and app user (Shipping)
+    community.mysql.mysql_info:
+      login_user: shipping
+      login_password: {{ mysql_password }}
+      login_host : mysql.royalreddy.site
+      login_db: cities
+
 # need to changes by modules
-  - name: load products
-    ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
-    when: data_output.stdout | int < 1
+  # - name: load products
+  #   ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
+  #   when: data_output.stdout | int < 1
 
-  - name: load products
-    ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/app-user.sql
-    when: data_output.stdout | int < 1
+  # - name: load products
+  #   ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/app-user.sql
+  #   when: data_output.stdout | int < 1
 
-  - name: load products
-    ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/master-data.sql
-    when: data_output.stdout | int < 1
+  # - name: load products
+  #   ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/master-data.sql
+  #   when: data_output.stdout | int < 1
 
-  - name: start service shipping, if not started
-    ansible.builtin.service:
-      name: shipping
-      state: restarted
+  # - name: start service shipping, if not started
+  #   ansible.builtin.service:
+  #     name: shipping
+  #     state: restarted
