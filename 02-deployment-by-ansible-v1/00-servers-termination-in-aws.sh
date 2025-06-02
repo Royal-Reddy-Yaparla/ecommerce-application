@@ -56,6 +56,7 @@ VALIDATE(){
 
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
+IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=$1 --query Reservations[].Instances[].InstanceId)
 aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=$1 --query Reservations[].Instances[].InstanceId --output text`
 
     aws route53 change-resource-record-sets \
