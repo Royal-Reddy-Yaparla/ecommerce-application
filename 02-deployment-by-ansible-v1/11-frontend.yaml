@@ -39,7 +39,7 @@
     ansible.builtin.unarchive:
       src: /tmp/frontend.zip
       dest: /usr/share/nginx/html 
-      remote_src: true
+      remote_src: yes
 
 # remove existing one otherwise config file won't be updated
   - name: remove default nginx conf
