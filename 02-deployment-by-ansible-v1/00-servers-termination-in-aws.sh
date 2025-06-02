@@ -63,7 +63,7 @@ INSTANCE_ID=$(aws ec2 describe-instances \
 
 IP=$(aws ec2 describe-instances \
   --filters "Name=tag:Name,Values=$1" \
-  --query "Reservations[].Instances[].PrivateAddress" \
+  --query "Reservations[].Instances[].PrivateIpAddress" \
   --output text)
 
 # Terminate EC2 instance
