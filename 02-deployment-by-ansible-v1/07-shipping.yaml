@@ -72,10 +72,14 @@
   - name: check data is loaded or not
     ansible.builtin.command:  mysql -h mysql.royalreddy.site -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
     register: data_output
+    tags:
+    - mysql
 
   - name: print data output
     ansible.builtin.debug:
       msg: "{{ data_output }}"
+    tags:
+    - mysql
 
 
   - name: check connection between mysql and app user (Shipping)
@@ -84,6 +88,8 @@
       login_password: "{{ mysql_password }}"
       login_host : mysql.royalreddy.site
       login_db: cities
+    tags:
+    - mysql
 
   - name: import the master data
     community.mysql.mysql_db:
@@ -95,6 +101,8 @@
     - /app/db/schema.sql
     - /app/db/app-user.sql 
     - /app/db/master-data.sql
+    tags:
+    - mysql
 
 # need to changes by modules
   # - name: load products
