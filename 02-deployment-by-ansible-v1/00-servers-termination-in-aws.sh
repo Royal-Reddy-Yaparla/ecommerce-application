@@ -56,11 +56,15 @@ VALIDATE(){
 
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
-IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=$1 --query Reservations[].Instances[].InstanceId)
+IP=$(aws ec2 describe-instances \
+  --filters "Name=tag:Name,Values=$INSTANCE_NAME" \
+  --query "Reservations[].Instances[].PrivateIpAddress" \
+  --output text)
+
 aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=$1 --query Reservations[].Instances[].InstanceId --output text`
 
-    aws route53 change-resource-record-sets \
-        --hosted-zone-id $ZONE_ID \
+aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
         --change-batch '
         {
             "Comment": "Creating or Updating a record set for cognito endpoint"
@@ -75,7 +79,7 @@ aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters
                     }]
                 }
             }]
-        }'
+        }'        
 
 
 # for instance in ${INSTANCES[@]}
