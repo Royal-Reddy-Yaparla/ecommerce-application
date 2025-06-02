@@ -1,0 +1,3 @@
+nohup ansible-playbook -i inventory.ini -e ansible_user=ec2-user -e ansible_password=DevOps321 08-rabbitmq.yaml &>>/home/ec2-user/rabbitmq.log &
+
+tail -f dispatch.log
