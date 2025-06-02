@@ -76,7 +76,7 @@ aws ec2 wait instance-terminated --instance-ids $INSTANCE_ID
 aws route53 change-resource-record-sets \
   --hosted-zone-id $ZONE_ID \
   --change-batch "{
-    \"Comment\": \"Deleting record set for $INSTANCE_NAME\",
+    \"Comment\": \"Deleting record set for $1\",
     \"Changes\": [{
       \"Action\": \"DELETE\",
       \"ResourceRecordSet\": {
