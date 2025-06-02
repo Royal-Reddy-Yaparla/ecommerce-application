@@ -81,11 +81,11 @@
   #   tags:
   #   - import
 
-  - name: print data output
-    ansible.builtin.debug:
-      msg: "{{ data_output }}"
-    tags:
-    - import
+  # - name: print data output
+  #   ansible.builtin.debug:
+  #     msg: "{{ data_output }}"
+  #   tags:
+  #   - import
 
 
   # - name: check connection between mysql and app user (Shipping)
