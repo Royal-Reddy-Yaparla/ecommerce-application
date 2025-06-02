@@ -103,6 +103,7 @@
       login_host : mysql.royalreddy.site
       name: all
       state: import
+      target: "{{ item }}"
     loop:
     - /app/db/schema.sql
     - /app/db/app-user.sql 
