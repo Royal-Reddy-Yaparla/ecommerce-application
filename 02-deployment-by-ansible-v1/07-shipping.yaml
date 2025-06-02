@@ -13,7 +13,7 @@
   - name: Install PyMySQL.
     ansible.builtin.pip:
       name: PyMySQL
-      executable: pip3.3
+      executable: pip3.9
     tags:
     - mysql
     
