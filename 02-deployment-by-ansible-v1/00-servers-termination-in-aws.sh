@@ -64,16 +64,22 @@ do
 
     if [ $instance != "frontend" ]
     then
-        IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text)
+        IP=$(aws ec2 describe-instances \
+        --filters "Name=tag:Name,Values=$instance" \
+        --query "Reservations[].Instances[].PrivateIpAddress" \
+        --output text)
     else 
-        IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+        IP=$(aws ec2 describe-instances \
+        --filters "Name=tag:Name,Values=$instance" \
+        --query "Reservations[].Instances[].PublicIpAddress" \
+        --output text)
     fi
 
 
-    # IP=$(aws ec2 describe-instances \
-    # --filters "Name=tag:Name,Values=$instance" \
-    # --query "Reservations[].Instances[].PrivateIpAddress" \
-    # --output text)
+    IP=$(aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values=$instance" \
+    --query "Reservations[].Instances[].PrivateIpAddress" \
+    --output text)
 
     # Terminate EC2 instance
     aws ec2 terminate-instances --instance-ids $INSTANCE_ID
