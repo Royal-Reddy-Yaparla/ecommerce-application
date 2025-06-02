@@ -56,8 +56,7 @@ VALIDATE(){
 
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
-INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag:Name,Values=$1 --query Reservations[].Instances[].InstanceId )
-echo "$1: $INSTANCE_ID"
+aws ec2 terminate-instances --instance-ids `aws ec2 describe-instances --filters Name=tag:Name,Values=$1 --query Reservations[].Instances[].InstanceId --output text`
 # for instance in ${INSTANCES[@]}
 # for instance in $@
 # do 
