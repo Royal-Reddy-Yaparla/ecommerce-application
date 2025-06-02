@@ -18,6 +18,7 @@
       state: started
       enabled: true
 
+# use module
   - name: creat user for application in rabbitmq
     ansible.builtin.command: "rabbitmqctl add_user roboshop roboshop123"
 

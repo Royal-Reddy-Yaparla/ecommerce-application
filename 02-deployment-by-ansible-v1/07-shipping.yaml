@@ -73,7 +73,7 @@
     ansible.builtin.debug:
       msg: "{{ data_output }}"
 
-
+# need to changes by modules
   - name: load products
     ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
     when: data_output.stdout | int < 1
