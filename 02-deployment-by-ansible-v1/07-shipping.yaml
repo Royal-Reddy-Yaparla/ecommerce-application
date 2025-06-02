@@ -18,10 +18,8 @@
     - cryptography
     - PyMySQL
     tags:
-    - mysql
+    - import
     
-    
-
   - name: create a directory if it does not exist
     ansible.builtin.file:
       path: /app
@@ -81,23 +79,23 @@
     ansible.builtin.command:  mysql -h mysql.royalreddy.site -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
     register: data_output
     tags:
-    - mysql
+    - import
 
   - name: print data output
     ansible.builtin.debug:
       msg: "{{ data_output }}"
     tags:
-    - mysql
+    - import
 
 
-  - name: check connection between mysql and app user (Shipping)
-    community.mysql.mysql_info:
-      login_user: shipping
-      login_password: "{{ mysql_password }}"
-      login_host : mysql.royalreddy.site
-      login_db: cities
-    # tags:
-    # - mysql
+  # - name: check connection between mysql and app user (Shipping)
+  #   community.mysql.mysql_info:
+  #     login_user: shipping
+  #     login_password: "{{ mysql_password }}"
+  #     login_host : mysql.royalreddy.site
+  #     login_db: cities
+  #   # tags:
+  #   # - mysql
 
   - name: import the master data
     community.mysql.mysql_db:
@@ -112,24 +110,11 @@
     - /app/db/app-user.sql 
     - /app/db/master-data.sql
     tags:
-    - mysql
-
-# need to changes by modules
-  # - name: load products
-  #   ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/schema.sql
-  #   when: data_output.stdout | int < 1
-
-  # - name: load products
-  #   ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/app-user.sql
-  #   when: data_output.stdout | int < 1
-
-  # - name: load products
-  #   ansible.builtin.shell: mysql -h mysql.royalreddy.site -uroot -p{{ mysql_password }} < /app/db/master-data.sql
-  #   when: data_output.stdout | int < 1
+    - import
 
   - name: start service shipping, if not started
     ansible.builtin.service:
       name: shipping
       state: restarted
     tags:
-    - mysql
+    - import
