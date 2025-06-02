@@ -80,7 +80,7 @@ aws route53 change-resource-record-sets \
     \"Changes\": [{
       \"Action\": \"DELETE\",
       \"ResourceRecordSet\": {
-        \"Name\": \"'$1'.royalreddy.site.\",
+        \"Name\": \"$1.royalreddy.site.\",
         \"Type\": \"A\",
         \"TTL\": 60,
         \"ResourceRecords\": [{\"Value\": \"$IP\"}]
