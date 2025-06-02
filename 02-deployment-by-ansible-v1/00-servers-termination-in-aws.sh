@@ -57,12 +57,12 @@ VALIDATE(){
 
 export PATH=$PATH:/usr/local/bin:/usr/bin
 INSTANCE_ID=$(aws ec2 describe-instances \
-  --filters "Name=tag:Name,Values=$INSTANCE_NAME" \
+  --filters "Name=tag:Name,Values=$1" \
   --query "Reservations[].Instances[].InstanceId" \
   --output text)
 
 IP=$(aws ec2 describe-instances \
-  --filters "Name=tag:Name,Values=$INSTANCE_NAME" \
+  --filters "Name=tag:Name,Values=$1" \
   --query "Reservations[].Instances[].PrivateAddress" \
   --output text)
 
