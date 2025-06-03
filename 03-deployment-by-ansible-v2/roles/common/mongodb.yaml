@@ -1,0 +1,4 @@
+  - name: Install mongodb server
+    ansible.builtin.package:
+      name: mongodb-mongosh
+      state: present
