@@ -1,9 +1,0 @@
-  - name: copy file mongo-package repo
-    ansible.builtin.copy:
-      src: mongo.repo
-      dest: /etc/yum.repos.d/mongo.repo
-  
-  - name: Install mongodb server
-    ansible.builtin.package:
-      name: mongodb-mongosh
-      state: present

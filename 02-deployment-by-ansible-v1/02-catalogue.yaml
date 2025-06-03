@@ -63,7 +63,7 @@
       src: mongo.repo
       dest: /etc/yum.repos.d/mongo.repo
   
-  - name: Install mongodb server
+  - name: Install mongodb client
     ansible.builtin.package:
       name: mongodb-mongosh
       state: present
