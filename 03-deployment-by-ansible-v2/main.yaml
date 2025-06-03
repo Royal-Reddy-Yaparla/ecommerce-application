@@ -1,5 +1,5 @@
 - name: "{{ component }}"
   hosts: "{{ component }}"
   become: true
-  role:
+  roles:
     - "{{ component }}"
