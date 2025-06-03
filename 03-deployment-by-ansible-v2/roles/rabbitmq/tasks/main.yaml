@@ -1,0 +1,39 @@
+
+- name: copy file rabbitmq-package repo
+  ansible.builtin.copy:
+    src: rabbitmq.repo
+    dest: /etc/yum.repos.d/rabbitmq.repo
+
+- name: Install rabbitmq server
+  ansible.builtin.package:
+    name: rabbitmq-server
+    state: present
+
+- name: start service rabbitmq, if not started
+  ansible.builtin.service:
+    name: rabbitmq-server
+    state: started
+    enabled: true
+
+- name: |-
+    Add user to server and assign full access control on / vhost.
+    The user might have permission rules for other vhost but you don't care.
+  community.rabbitmq.rabbitmq_user:
+    user: roboshop 
+    password: roboshop123
+    permissions:
+      - vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+    state: present
+
+
+# # use module
+#   - name: creat user for application in rabbitmq
+#     ansible.builtin.command: "rabbitmqctl add_user roboshop roboshop123"
+
+#   - name: set_permissions for user  in rabbitmq
+#     ansible.builtin.command: 'rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"'
+
+

@@ -1,2 +1,4 @@
 MYSQL_HOST: mysql.royalreddy.site
 CART_HOST: cart.royalreddy.site
+MYSQL_USERNAME: root 
+MYSQL_PASSWORD: RoboShop@1

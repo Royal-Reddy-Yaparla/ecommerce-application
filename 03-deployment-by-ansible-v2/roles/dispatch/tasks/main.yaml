@@ -3,12 +3,12 @@
       name: common
       tasks_from: app-setup.yaml
 
-  - name: install nodejs 
+  - name: install golang 
     include_role:
       name: common
-      tasks_from: nodejs-setup.yaml
+      tasks_from: golang-setup.yaml
 
-  - name: start user service
+  - name: start dispatch service
     include_role:
       name: common
       tasks_from: systemd-service.yaml

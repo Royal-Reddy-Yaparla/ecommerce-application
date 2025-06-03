@@ -8,38 +8,11 @@
     name: common
     tasks_from: maven-setup.yaml
 
-- name: download the dependencies & build the application  
-  ansible.builtin.command: "mvn clean package"
-  args:
-    chdir: /app
-
-- name: rename jar file
-  ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
-  args:
-    chdir: /app
-
-- name: copy service file to /etc/systemd/system/
-  ansible.builtin.template:
-    src: templates/shipping.service.j2
-    dest: /etc/systemd/system/shipping.service
-  
-
-- name: start shipping service
-  include_role:
-    name: common
-    tasks_from: systemd-service.yaml
-
-
-- name: install mysql-client
-  ansible.builtin.package:
-    name: mysql 
-    state: present
-
 - name: import the master data
   community.mysql.mysql_db:
-    login_user: root
-    login_password: RoboShop@1
-    login_host : mysql.royalreddy.site
+    login_user: "{{ MYSQL_USERNAME }}"
+    login_password: "{{ MYSQL_PASSWORD }}"
+    login_host : "{{ MYSQL_HOST }}"
     name: all
     state: import
     target: "{{ item }}"
@@ -50,9 +23,7 @@
   tags:
   - import
 
-- name: start service shipping, if not started
-  ansible.builtin.service:
-    name: shipping
-    state: restarted
-  tags:
-  - import
+- name: start shipping service
+  include_role:
+    name: common
+    tasks_from: systemd-service.yaml

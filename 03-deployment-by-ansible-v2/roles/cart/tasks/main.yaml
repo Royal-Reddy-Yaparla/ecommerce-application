@@ -8,12 +8,6 @@
       name: common
       tasks_from: nodejs-setup.yaml
 
-    
-  - name: copy service file to /etc/systemd/system/
-    ansible.builtin.template:
-      src: templates/cart.service.j2
-      dest: /etc/systemd/system/cart.service
-
   - name: start cart service
     include_role:
       name: common
