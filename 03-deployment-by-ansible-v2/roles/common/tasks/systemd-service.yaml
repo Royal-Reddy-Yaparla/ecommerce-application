@@ -1,6 +1,6 @@
 - name: copy service file to /etc/systemd/system/
   ansible.builtin.template:
-    src: templates/"{{ component }}.service.j2"
+    src: "{{ component }}.service.j2"
     dest: "/etc/systemd/system/{{ component }}.service"
   
 - name: load the service
