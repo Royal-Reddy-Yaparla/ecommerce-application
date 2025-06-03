@@ -21,7 +21,7 @@
   
   - name: copy service file to /etc/systemd/system/
     ansible.builtin.template:
-      src: templates/catalogue.service.j2
+      src: templates/catalogue.j2
       dest: /etc/systemd/system/catalogue.service
     
   - name: start catalogue service
