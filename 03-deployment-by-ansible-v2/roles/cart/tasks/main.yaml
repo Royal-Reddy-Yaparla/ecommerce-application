@@ -1,0 +1,20 @@
+  - name: application set-up
+    include_role:
+      name: common
+      tasks_from: app-setup.yaml
+
+  - name: install nodejs 
+    include_role:
+      name: common
+      tasks_from: nodejs-setup.yaml
+
+    
+  - name: copy service file to /etc/systemd/system/
+    ansible.builtin.template:
+      src: templates/cart.service.j2
+      dest: /etc/systemd/system/cart.service
+
+  - name: start cart service
+    include_role:
+      name: common
+      tasks_from: systemd-service.yaml
