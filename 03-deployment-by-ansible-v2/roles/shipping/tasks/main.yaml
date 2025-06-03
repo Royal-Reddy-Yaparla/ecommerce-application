@@ -38,7 +38,7 @@
 - name: import the master data
   community.mysql.mysql_db:
     login_user: root
-    login_password: "{{ mysql_password }}"
+    login_password: RoboShop@1
     login_host : mysql.royalreddy.site
     name: all
     state: import
