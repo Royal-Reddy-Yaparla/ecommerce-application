@@ -4,6 +4,6 @@
 
   - name: start service catalogue, if not started
     ansible.builtin.service:
-      name: {{ component }}
+      name: "{{ component }}"
       state: started
       enabled: true
