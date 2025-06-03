@@ -1,0 +1,46 @@
+  - name: nginx install
+    include_role:
+      name: common
+      tasks_from: nginx-setup.yaml
+
+  - name: start service nginx, if not started
+    ansible.builtin.service:
+      name: nginx
+      state: started
+      enabled: true
+
+  - name: remove default nginx directory
+    ansible.builtin.file:
+      path: /usr/share/nginx/html
+      state: absent
+
+  - name: download application code
+    ansible.builtin.get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip 
+      dest: /tmp/frontend.zip
+
+  - name: create default nginx directory
+    ansible.builtin.file:
+      path: /usr/share/nginx/html
+      state: directory
+
+    
+  - name: extract application code /tmp/frontend.zip
+    ansible.builtin.unarchive:
+      src: /tmp/frontend.zip
+      dest: /usr/share/nginx/html 
+      remote_src: yes
+
+# remove existing one otherwise config file won't be updated
+  - name: remove default nginx conf
+    ansible.builtin.file:
+      path: /etc/nginx/nginx.conf
+      state: absent
+
+  - name: copy config file to /etc/nginx/
+    ansible.builtin.template:
+      src: templates/nginx.conf.j2
+      dest: /etc/nginx/nginx.conf
+    notify: 
+      - restart nginx
+
