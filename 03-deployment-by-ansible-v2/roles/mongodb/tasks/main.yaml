@@ -1,0 +1,36 @@
+  - name: copy file mongo-package repo
+    ansible.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+  
+  - name: Install mongodb server
+    ansible.builtin.package:
+      name: mongodb-org
+      state: present
+
+  - name: start service mongod, if not started
+    ansible.builtin.service:
+      name: mongod
+      state: started
+      enabled: true
+
+  - name: check mongod version
+    ansible.builtin.command: "mongod --version"
+    register: mongod_version
+
+  - name: print mongo version
+    ansible.builtin.debug:
+      msg: "{{ mongod_version.stdout_lines }}"
+        
+  - name: update listen address from 127.0.0.1 to 0.0.0.0
+    ansible.builtin.replace:
+      path: /etc/mongod.conf
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
+
+  - name: restart service mongod
+    ansible.builtin.service:
+      name: mongod
+      state: restarted
+
+  
