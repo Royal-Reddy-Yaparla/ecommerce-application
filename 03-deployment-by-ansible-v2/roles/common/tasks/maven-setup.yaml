@@ -1,0 +1,13 @@
+- name: install maven 
+  ansible.builtin.package:
+    name: maven 
+    state: present  
+
+- name: Install PyMySQL.
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: pip3.9
+  loop:
+  - cryptography
+  - PyMySQL
+ 
