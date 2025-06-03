@@ -1,0 +1,22 @@
+  - name: install redis 
+    include_role:
+      name: common
+      tasks_from: redis-setup.yaml
+
+  - name: update listen address from 127.0.0.1 to 0.0.0.0
+    ansible.builtin.replace:
+      path: /etc/redis/redis.conf
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
+
+  - name: update protected-mode to no
+    ansible.builtin.lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: 'protected-mode'
+      line: protected-mode no
+
+  - name: start service mongod, if not started
+    ansible.builtin.service:
+      name: redis
+      state: started
+      enabled: true
