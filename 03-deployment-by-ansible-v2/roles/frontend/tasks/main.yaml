@@ -24,7 +24,6 @@
       path: /usr/share/nginx/html
       state: directory
 
-    
   - name: extract application code /tmp/frontend.zip
     ansible.builtin.unarchive:
       src: /tmp/frontend.zip
