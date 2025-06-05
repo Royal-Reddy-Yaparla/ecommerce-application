@@ -37,9 +37,8 @@
       tasks_from: systemd-service.yaml
 
 # deployment with tags
-  - name: start catalogue service
-    tags:
-    - deployment
+  - name: deployment catalogue service
+    tags: deployment
     include_role:
       name: common
       tasks_from: deployment.yaml
