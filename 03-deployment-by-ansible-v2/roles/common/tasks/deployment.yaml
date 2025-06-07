@@ -20,7 +20,6 @@
     src: https://roboshop-artifacts.s3.amazonaws.com/{{ component }}-v{{ version }}.zip 
     dest: /app/
     remote_src: yes
-  when: version  == "3"
 
 
 - name: install dependecies
