@@ -38,8 +38,9 @@
 
 # deployment with tags
   - name: deployment catalogue service
-    tags: deployment
-    include_role:
+    tags: 
+    - deployment
+    import_role:
       name: common
       tasks_from: deployment.yaml
   
