@@ -32,4 +32,3 @@
   ansible.builtin.service:
     name: "{{ component }}"
     state: restarted
-  when: version == "3"
