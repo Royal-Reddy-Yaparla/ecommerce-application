@@ -24,8 +24,8 @@
 - name: install dependecies
   ags: 
   - deployment
-  community.general.npm:
-  path: /app
+  community.general.nm:
+    path: /app
 
 - name: start service "{{ component }}", if not started
   ansible.builtin.service:
