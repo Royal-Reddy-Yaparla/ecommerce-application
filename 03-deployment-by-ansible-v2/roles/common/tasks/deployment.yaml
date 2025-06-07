@@ -26,8 +26,6 @@
     path: /app
 
 - name: start service "{{ component }}", if not started
-  tags: 
-    - deployment
   ansible.builtin.service:
     name: "{{ component }}"
     state: start
