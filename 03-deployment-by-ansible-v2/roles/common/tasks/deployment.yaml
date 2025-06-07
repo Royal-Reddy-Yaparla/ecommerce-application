@@ -22,8 +22,8 @@
     remote_src: yes
 
 - name: install dependecies
-  ags: 
-  - deployment
+  # ags: 
+  # - deployment
   community.general.nm:
     path: /app
 
