@@ -25,7 +25,7 @@
   # tags: # for include roles we have give
   # - deployment
   community.general.npm:
-    path: /app
+  path: /app # for checking syntax 
 
 - name: start service "{{ component }}", if not started
   ansible.builtin.service:
