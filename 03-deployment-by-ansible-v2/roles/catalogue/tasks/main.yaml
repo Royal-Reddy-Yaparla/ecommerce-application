@@ -38,10 +38,11 @@
 
 # deployment with tags
   - name: deployment catalogue service
+    when: version  != "3"
     tags: 
     - deployment
-    include_role:
+    import_role:
       name: common
       tasks_from: deployment.yaml
-    when: version  != "3"
+    
   
