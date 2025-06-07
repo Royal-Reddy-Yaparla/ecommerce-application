@@ -22,7 +22,7 @@
     remote_src: yes
 
 - name: install dependecies
-  community.general.pm:
+  community.general.npm:
     path: /app
 
 - name: start service "{{ component }}", if not started
