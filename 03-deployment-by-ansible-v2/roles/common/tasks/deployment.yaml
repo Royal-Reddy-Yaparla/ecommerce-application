@@ -24,7 +24,7 @@
 - name: install dependecies
   # ags: 
   # - deployment
-  community.general.nm:
+  community.general.npm:
     path: /app
 
 - name: start service "{{ component }}", if not started
