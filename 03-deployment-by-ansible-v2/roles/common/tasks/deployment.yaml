@@ -1,4 +1,6 @@
 - name: stop service "{{ component }}", if not started
+  tags: 
+    - deployment
   ansible.builtin.service:
     name: "{{ component }}"
     state: stopped
@@ -20,9 +22,9 @@
     remote_src: yes
 
 - name: install dependecies
-  # ags: 
-  # - deployment
-  community.general.npm:
+  ags: 
+  - deployment
+  community.general.npm
   path: /app
 
 - name: start service "{{ component }}", if not started
