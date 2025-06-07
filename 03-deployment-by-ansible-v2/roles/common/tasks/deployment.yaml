@@ -22,8 +22,10 @@
     remote_src: yes
 
 - name: install dependecies
+  ags: 
+  - deployment
   community.general.npm:
-    path: /app
+  path: /app
 
 - name: start service "{{ component }}", if not started
   ansible.builtin.service:
