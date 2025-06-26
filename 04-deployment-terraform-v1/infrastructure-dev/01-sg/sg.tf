@@ -24,3 +24,10 @@ resource "aws_security_group_rule" "bastion_sg_egress_rules" {
   cidr_blocks     = ["0.0.0.0/0"]
   security_group_id = local.bastion_sg_id
 }
+
+/* 
+backend-alb-security-group
+allow port 80 from bastion-security-group instead of elastic ip assigning to bastion-ip , ip is dynamic,
+we can simple attach bastion-security-group , even bastion ip change , but won't secuity-group change.
+*/
+

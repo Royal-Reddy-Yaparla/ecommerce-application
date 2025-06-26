@@ -1,0 +1,10 @@
+1. open sources alb module
+2. take inputs
+    - vpc id 
+    - backend sg_id
+    - private
+    - listen-rules 
+        - 80 
+        - default response 
+        
+3. check access ALB response from bastion

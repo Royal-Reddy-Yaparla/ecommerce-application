@@ -5,7 +5,7 @@ resource "aws_instance" "main" {
   subnet_id              = var.subnet_id
   tags = merge(
     var.ec2_tags,
-    var.common_tags,
+    local.common_tags,
     {
       Name = "${var.project}-${var.environment}-${var.component}"
     }
