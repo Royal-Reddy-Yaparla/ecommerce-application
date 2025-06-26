@@ -18,12 +18,27 @@ variable "security_group_ids" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-06b38097daef76f2c" #us-east-1a
+
 }
 
+variable "project" {
+  type = string
+}
 
+variable "environment" {
+  type = string
+}
 
-variable "tags" {
+variable "component" {
+  type = string
+}
+
+variable "ec2_tags" {
   type    = map(any)
   default = {}
+}
+
+variable "common_tags" {
+  type = map 
+  default = {}  
 }

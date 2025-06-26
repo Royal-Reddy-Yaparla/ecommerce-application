@@ -1,8 +1,8 @@
-variable "sg_name" {
-  default = "frontend"
+variable "bastion_sg_name" {
+  default = "bastion"
 }
 
-variable "sg_description" {
+variable "bastion_sg_description" {
   default = "allowing SSH,HTTP,HTTPS"
 }
 
@@ -18,7 +18,7 @@ variable "vpc_id" {
   default = "vpc-03f342ee5becaa338"
 }
 
-variable "sg_tags" {
-  type    = map(any)
+variable "bastion_sg_tags" {
+  type    = map
   default = {}
 }
