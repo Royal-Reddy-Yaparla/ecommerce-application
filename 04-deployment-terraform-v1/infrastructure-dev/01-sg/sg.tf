@@ -84,7 +84,7 @@ module "vpn" {
   environment    = var.environment
 }
 
-# allowing ssh,https, 1193,943
+# allowing ssh,https, 1194,943
 resource "aws_security_group_rule" "vpn_ingress_rules" {
   count = length(var.vpn_ports)
   type            = "ingress"

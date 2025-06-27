@@ -25,7 +25,7 @@ provider: openVPN
 - connect ec2 by ssh , after login 
 - prompt - yes / enter
 
-- setup password
+- setup password : Admin@123
 
 - no key just enter 
 
@@ -40,6 +40,7 @@ now setup client in our local machines
 
 - download and install 
 - from ec2 will get client UI 
+- paste in in Type Server address / Cloud ID (VPN server ID)
   - enter
       - username
       - password

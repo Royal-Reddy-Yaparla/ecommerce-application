@@ -44,5 +44,5 @@ variable "vpn_sg_description" {
 
 variable "vpn_ports" {
   type = list
-  default = [22,443,1193,943]
+  default = [22,443,1194,943]
 }
