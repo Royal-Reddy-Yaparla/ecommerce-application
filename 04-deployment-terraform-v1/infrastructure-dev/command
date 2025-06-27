@@ -1,5 +1,5 @@
 single command for create infra 
-for i in 00-vpc/ 01-sg/ 02-ec2/ ; do cd $i; terraform apply -auto-approve ; cd ..; done
+for i in 00-vpc/ 01-sg/ 02-bastion/ ; do cd $i; terraform apply -auto-approve ; cd ..; done
 
 single command for destroy infra 
-for i in  02-ec2/ 01-sg/ 00-vpc/; do cd $i ; terraform destroy -auto-approve ; cd ..; done
+for i in  02-bastion/ 01-sg/ 00-vpc/; do cd $i ; terraform destroy -auto-approve ; cd ..; done
