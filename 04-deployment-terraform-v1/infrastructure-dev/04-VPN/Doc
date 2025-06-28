@@ -46,7 +46,21 @@ now setup client in our local machines
       - password
 - check pc ip address.
 
+-----------------------------------------------------
+login to admin 
+https://<public_ip of vpn server>:943/admin 
 
+username: openvpn 
+password: Admin@123 
 
+client
+https://<public_ip of vpn server>:943/ 
 
+username: openvpn 
+password: Admin@123 
+------------------------------------------------------------
+login into vpn server
+ssh -i <.pem> openvpnas@https://<public_ip>
 
+netstat -lntp
+---------------------------------------------------------------

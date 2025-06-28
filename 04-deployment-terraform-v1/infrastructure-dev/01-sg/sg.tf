@@ -1,8 +1,8 @@
 # bastion
 module "bastion" {
   source         = "../../modules/sg"
-  sg_name        = var.bastion_sg_name
-  sg_description = var.bastion_sg_description
+  sg_name        = "bastion"
+  sg_description = "allowing SSH,HTTP,HTTPS"
   vpc_id         = local.vpc_id
   project        = var.project
   environment    = var.environment
@@ -36,8 +36,8 @@ we can simple attach bastion-security-group , even bastion ip change , but won't
 # backend-ALB
 module "backend_alb" {
   source         = "../../modules/sg"
-  sg_name        = var.backend_alb_sg_name
-  sg_description = var.backend_alb_description
+  sg_name        = "backend_alb"
+  sg_description = "allowing SSH"
   vpc_id         = local.vpc_id
   project        = var.project
   environment    = var.environment
@@ -77,8 +77,8 @@ resource "aws_security_group_rule" "backend_alb_egress_rules" {
 # vpn
 module "vpn" {
   source         = "../../modules/sg"
-  sg_name        = var.vpn_sg_name
-  sg_description = var.vpn_sg_description
+  sg_name        = "vpn"
+  sg_description = "allowing SSH HTTPS 1193 943"
   vpc_id         = local.vpc_id
   project        = var.project
   environment    = var.environment
@@ -105,6 +105,126 @@ resource "aws_security_group_rule" "vpn_egress_rules" {
 }
 
 # mongodb
-
+module "mongodb" {
+  source         = "../../modules/sg"
+  sg_name        = "mongodb"
+  sg_description = "allowing SSH 27017"
+  vpc_id         = local.vpc_id
+  project        = var.project
+  environment    = var.environment
+}
 
 # mongodb rules allow ssh and 27017 from vpn sg
+resource "aws_security_group_rule" "mongodb_ingress_rules" {
+  count = length(var.mongodb_ports)
+  type            = "ingress"
+  from_port       = var.mongodb_ports[count.index]
+  to_port         = var.mongodb_ports[count.index]
+  protocol        = "tcp"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.mongodb.sg_id
+}
+
+# mongodb egress
+resource "aws_security_group_rule" "mongodb_egress_rules" {
+  type            = "egress"
+  from_port       = 0
+  to_port         = 0
+  protocol        = "-1"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.mongodb.sg_id
+}
+
+# mysql 
+module "mysql" {
+  source         = "../../modules/sg"
+  sg_name        = "mysql"
+  sg_description = "allowing SSH 3306"
+  vpc_id         = local.vpc_id
+  project        = var.project
+  environment    = var.environment
+}
+
+# mysql rules allow ssh and 3306 from vpn sg
+resource "aws_security_group_rule" "mysql_ingress_rules" {
+  count = length(var.mysql_ports)
+  type            = "ingress"
+  from_port       = var.mysql_ports[count.index]
+  to_port         = var.mysql_ports[count.index]
+  protocol        = "tcp"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.mysql.sg_id
+}
+
+# mysql egress
+resource "aws_security_group_rule" "mysql_egress_rules" {
+  type            = "egress"
+  from_port       = 0
+  to_port         = 0
+  protocol        = "-1"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.mysql.sg_id
+}
+
+# redis 
+module "redis" {
+  source         = "../../modules/sg"
+  sg_name        = "redis"
+  sg_description = "allowing SSH 6379"
+  vpc_id         = local.vpc_id
+  project        = var.project
+  environment    = var.environment
+}
+
+# redis rules allow ssh and 6379 from vpn sg
+resource "aws_security_group_rule" "redis_ingress_rules" {
+  count = length(var.redis_ports)
+  type            = "ingress"
+  from_port       = var.redis_ports[count.index]
+  to_port         = var.redis_ports[count.index]
+  protocol        = "tcp"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.redis.sg_id
+}
+
+# redis egress
+resource "aws_security_group_rule" "redis_egress_rules" {
+  type            = "egress"
+  from_port       = 0
+  to_port         = 0
+  protocol        = "-1"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.redis.sg_id
+}
+
+
+# rabbitmq 
+module "rabbitmq" {
+  source         = "../../modules/sg"
+  sg_name        = "rabbitmq"
+  sg_description = "allowing SSH 5672"
+  vpc_id         = local.vpc_id
+  project        = var.project
+  environment    = var.environment
+}
+
+# rabbitmq rules allow ssh and 5672 from vpn sg
+resource "aws_security_group_rule" "rabbitmq_ingress_rules" {
+  count = length(var.rabbitmq_ports)
+  type            = "ingress"
+  from_port       = var.rabbitmq_ports[count.index]
+  to_port         = var.rabbitmq_ports[count.index]
+  protocol        = "tcp"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.rabbitmq.sg_id
+}
+
+# redis egress
+resource "aws_security_group_rule" "rabbitmq_egress_rules" {
+  type            = "egress"
+  from_port       = 0
+  to_port         = 0
+  protocol        = "-1"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.rabbitmq.sg_id
+}
