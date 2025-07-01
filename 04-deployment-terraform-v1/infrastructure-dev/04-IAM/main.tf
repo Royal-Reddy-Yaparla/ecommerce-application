@@ -37,7 +37,7 @@ resource "aws_iam_role_policy" "access_ssm_mysql_password" {
           "ssm:GetParameters",
           "ssm:DescribeParameters"
         ]
-        Resource = "arn:aws:ssm:us-east-1:801333664304:parameter/roboshop/mysql/mysql_root_password"
+        Resource = "arn:aws:ssm:us-east-1:801333664304:parameter/ecom/dev/mysql/mysql_root_password"
       }
     ]
   })

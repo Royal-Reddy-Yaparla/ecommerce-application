@@ -39,3 +39,8 @@ variable "rabbitmq_ports" {
   type = list
   default = [22,5672]
 }
+
+variable "catalogue_ports" {
+  type = list
+  default = [22,8080]
+}

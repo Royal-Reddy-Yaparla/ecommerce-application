@@ -5,8 +5,8 @@ output "public_ip" {
 
 output "vpn_info" {
   value = templatefile("${path.module}/vpn_template.tmpl", {
-    admin_url = "https://${aws_instance.openvpn.public_ip}:943/admin"
-    client_url = "https://${aws_instance.openvpn.public_ip}:943/"
+    admin_url = "https://vpn-dev.royalreddy.site/admin/"
+    client_url = "https://vpn-dev.royalreddy.site/"
     username   = "openvpn"
     password   = "Admin@123"
   })

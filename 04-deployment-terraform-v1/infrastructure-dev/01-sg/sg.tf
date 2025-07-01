@@ -228,3 +228,57 @@ resource "aws_security_group_rule" "rabbitmq_egress_rules" {
   cidr_blocks     = ["0.0.0.0/0"]
   security_group_id = module.rabbitmq.sg_id
 }
+
+# catalogue
+module "catalogue" {
+  source         = "../../modules/sg"
+  sg_name        = "catalogue"
+  sg_description = "allowing SSH 8080"
+  vpc_id         = local.vpc_id
+  project        = var.project
+  environment    = var.environment
+}
+
+# catalogue rules allow ssh and 8080 from bastion sg
+resource "aws_security_group_rule" "catalogue_bastion_ingress_rules" {
+  count = length(var.catalogue_ports)
+  type            = "ingress"
+  from_port       = var.catalogue_ports[count.index]
+  to_port         = var.catalogue_ports[count.index]
+  protocol        = "tcp"
+  source_security_group_id     = module.bastion.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+# catalogue rules allow ssh and 8080 from vpn sg
+resource "aws_security_group_rule" "catalogue_vpn_ingress_rules" {
+  count = length(var.catalogue_ports)
+  type            = "ingress"
+  from_port       = var.catalogue_ports[count.index]
+  to_port         = var.catalogue_ports[count.index]
+  protocol        = "tcp"
+  source_security_group_id     = module.vpn.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+# catalogue rules allow ssh and 8080 from backend-alb sg
+resource "aws_security_group_rule" "catalogue_backend_alb_ingress_rules" {
+  count = length(var.catalogue_ports)
+  type            = "ingress"
+  from_port       = 8080
+  to_port         = 8080
+  protocol        = "tcp"
+  source_security_group_id     = module.backend_alb.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+
+# catalogue egress
+resource "aws_security_group_rule" "catalogue_egress_rules" {
+  type            = "egress"
+  from_port       = 0
+  to_port         = 0
+  protocol        = "-1"
+  cidr_blocks     = ["0.0.0.0/0"]
+  security_group_id = module.catalogue.sg_id
+}
