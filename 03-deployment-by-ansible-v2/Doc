@@ -1,0 +1,2 @@
+# execution step
+ansible-playbook -i inventory.ini main.yaml -e component=<component_name>

@@ -1,10 +1,13 @@
 # create ec2 mongodb
 # using terraform null resource ansible integration 
-/* null resouces won't create any resource, but 
+
+/* 
+null resouces won't create any resource, but 
 it will follow stardard life-cycle of terraform ,
 we can null resourcs for connect instances 
 NOTE: terraform null-resource is deprecated , instead , we can use terraform data
 */
+
 /* 
 1. connect instance
 2. copy the scripts 
@@ -36,7 +39,7 @@ resource "aws_instance" "mongodb" {
   )
 }
 
-# null resouces
+# null resouces 
 resource "terraform_data" "mongodb" {
   triggers_replace = [aws_instance.mongodb.id]
   provisioner "file" {
@@ -139,7 +142,7 @@ resource "aws_instance" "mysql" {
   instance_type          = var.instance_type
   vpc_security_group_ids = local.mysql_sg_id
   subnet_id              = local.subnet_id
-
+  # iam_instance_profile = data.aws_ssm_parameter.iam.value # iam role to access ssm params access
   tags = merge(
     var.ec2_tags,
     local.common_tags,
