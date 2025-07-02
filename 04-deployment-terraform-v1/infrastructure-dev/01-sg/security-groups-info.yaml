@@ -1,0 +1,41 @@
+backend-alb:  # frontend-facing, not accepting direct inbound
+
+catalogue: # inbound
+  - vpn:
+      ports: [22, 8080]
+  - bastion:
+      ports: [22, 8080]
+  - backend-alb:
+      ports: [8080]
+
+mongodb: # inbound
+  - vpn:
+      ports: [22, 27017]
+  - bastion:
+      ports: [22, 27017]
+  - catalogue:
+      ports: [27017]
+
+mysql: # inbound
+  - vpn:
+      ports: [22, 3306]
+  - bastion:
+      ports: [22, 3306]
+  - shipping:
+      ports: [3306]
+
+rabbitmq: # inbound
+  - vpn:
+      ports: [22, 5672]
+  - bastion:
+      ports: [22, 5672]
+  - shipping:
+      ports: [5672]
+
+redis: # inbound
+  - vpn:
+      ports: [22, 6379]
+  - bastion:
+      ports: [22, 6379]
+  - shipping:
+      ports: [6379]

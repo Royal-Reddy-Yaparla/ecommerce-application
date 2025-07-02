@@ -1,5 +1,5 @@
 variable "instance_type" {
-  default = "t2.micro" # for validation test try t2.large
+  default = "t2.micro" 
 }
 
 variable "common_tags" {

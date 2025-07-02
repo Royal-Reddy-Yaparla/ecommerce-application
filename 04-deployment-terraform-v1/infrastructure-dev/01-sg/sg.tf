@@ -263,7 +263,6 @@ resource "aws_security_group_rule" "catalogue_vpn_ingress_rules" {
 
 # catalogue rules allow ssh and 8080 from backend-alb sg
 resource "aws_security_group_rule" "catalogue_backend_alb_ingress_rules" {
-  count = length(var.catalogue_ports)
   type            = "ingress"
   from_port       = 8080
   to_port         = 8080
@@ -281,4 +280,14 @@ resource "aws_security_group_rule" "catalogue_egress_rules" {
   protocol        = "-1"
   cidr_blocks     = ["0.0.0.0/0"]
   security_group_id = module.catalogue.sg_id
+}
+
+# mongodb rules allow ssh and 27017 from catalogue sg
+resource "aws_security_group_rule" "mongodb_catalogue_ingress_rules" {
+  type            = "ingress"
+  from_port       = 27017
+  to_port         = 27017
+  protocol        = "tcp"
+  source_security_group_id     = module.catalogue.sg_id
+  security_group_id = module.mongodb.sg_id
 }

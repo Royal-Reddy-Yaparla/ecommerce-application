@@ -1,7 +1,7 @@
 Open-source VPN
 provider: openVPN
 
-- provission an ec2 instance with AMI 
+- provision an ec2 instance with AMI 
   AMI: OpenVPN Access Server Community -8fbe*
 
 - create security group for VPN 
