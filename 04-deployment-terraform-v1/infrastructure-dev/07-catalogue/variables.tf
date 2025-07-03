@@ -16,10 +16,6 @@ variable "environment" {
   default = "dev"
 }
 
-variable "component" {
-  default = "mongodb"
-}
-
 variable "ec2_tags" {
   default = {
     region  = "us-east-1"

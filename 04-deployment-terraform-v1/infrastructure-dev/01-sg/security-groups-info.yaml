@@ -1,5 +1,10 @@
 backend-alb:  # frontend-facing, not accepting direct inbound
-
+  - vpn:
+      ports: [80]
+  - bastion:
+      ports: [80]
+---
+# backend services
 catalogue: # inbound
   - vpn:
       ports: [22, 8080]
@@ -8,6 +13,8 @@ catalogue: # inbound
   - backend-alb:
       ports: [8080]
 
+---
+# databases
 mongodb: # inbound
   - vpn:
       ports: [22, 27017]
