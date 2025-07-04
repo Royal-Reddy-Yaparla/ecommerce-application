@@ -35,23 +35,23 @@ resource "aws_lb_listener" "front_end" {
 
 resource "aws_route53_record" "backend-alb" {
   zone_id = var.zone_id
-################################################################################
-# backend-dev-royalreddy.site is forwarded to the Application Load Balancer (ALB),
+  ################################################################################
+  # backend-dev-royalreddy.site is forwarded to the Application Load Balancer (ALB),
   # which serves as the entry point for multiple backend components.
-# Example:
+  # Example:
   # - catalogue.backend-dev-royalreddy.site should be routed to the "catalogue" target group.
-# To achieve this, we need to create a separate subdomain for each component,
+  # To achieve this, we need to create a separate subdomain for each component,
   # like:
   # - catalogue.backend-dev-royalreddy.site
   # - cart.backend-dev-royalreddy.site
   # - user.backend-dev-royalreddy.site
   # and so on.
-# A wildcard DNS record (*.backend-dev-royalreddy.site) should be configured
+  # A wildcard DNS record (*.backend-dev-royalreddy.site) should be configured
   # to point to the ALB, enabling dynamic subdomain resolution and routing
   # via ALB listener rules based on the Host header.
-################################################################################
-  name    = "*.backend-${var.environment}.${var.domain}"
-  type    = "A"
+  ################################################################################
+  name = "*.backend-${var.environment}.${var.domain}"
+  type = "A"
   alias {
     name                   = module.alb.dns_name
     zone_id                = module.alb.zone_id

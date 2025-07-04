@@ -55,7 +55,7 @@ resource "terraform_data" "mongodb" {
   provisioner "file" {
     source      = "scripts/bootstrap.sh"
     destination = "/tmp/mongodb.sh"
-  }                                                                   
+  }
   connection {
     type     = "ssh"
     user     = "ec2-user"
@@ -92,7 +92,7 @@ resource "terraform_data" "redis" {
   provisioner "file" {
     source      = "scripts/bootstrap.sh"
     destination = "/tmp/redis.sh"
-  }                                                                   
+  }
   connection {
     type     = "ssh"
     user     = "ec2-user"
@@ -130,7 +130,7 @@ resource "terraform_data" "rabbitmq" {
   provisioner "file" {
     source      = "scripts/bootstrap.sh"
     destination = "/tmp/rabbitmq.sh"
-  }                                                                   
+  }
   connection {
     type     = "ssh"
     user     = "ec2-user"
@@ -152,7 +152,7 @@ resource "aws_instance" "mysql" {
   instance_type          = var.instance_type
   vpc_security_group_ids = local.mysql_sg_id
   subnet_id              = local.subnet_id
-  iam_instance_profile = "EcomAdminAccess" # iam role to access ssm params access
+  iam_instance_profile   = "EcomAdminAccess" # iam role to access ssm params access
   tags = merge(
     var.ec2_tags,
     local.common_tags,
@@ -168,7 +168,7 @@ resource "terraform_data" "mysql" {
   provisioner "file" {
     source      = "scripts/bootstrap.sh"
     destination = "/tmp/mysql.sh"
-  }                                                                   
+  }
   connection {
     type     = "ssh"
     user     = "ec2-user"

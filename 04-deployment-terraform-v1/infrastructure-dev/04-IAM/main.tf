@@ -45,6 +45,6 @@ resource "aws_iam_role_policy" "access_ssm_mysql_password" {
 
 # Instance profile for EC2 to use the IAM role
 resource "aws_iam_instance_profile" "mysql_profile" {
-  name = "EcomMysqlCredentialAccess"  # Must match what you use in EC2
+  name = "EcomMysqlCredentialAccess" # Must match what you use in EC2
   role = aws_iam_role.access_mysql_creds.name
 }

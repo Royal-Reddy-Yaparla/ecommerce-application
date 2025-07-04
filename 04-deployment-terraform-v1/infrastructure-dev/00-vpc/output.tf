@@ -8,7 +8,7 @@ output "public_subnets" {
 }
 
 output "public_subnets_aws" {
-  value = join("," , module.vpc.public_subnets)
+  value = join(",", module.vpc.public_subnets)
 }
 
 
