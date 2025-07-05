@@ -24,3 +24,6 @@ data "aws_ssm_parameter" "private_subnets" {
   name = "/${var.project}/${var.environment}/private_subnets"
 }
 
+data "aws_ssm_parameter" "backend_alb_listener_arn" {
+  name = "/${var.project}/${var.environment}/backend_alb_listener_arn"
+}

@@ -30,3 +30,18 @@ variable "zone_id" {
 variable "domain" {
   default = "royalreddy.site"
 }
+
+# variable "auto-scaling-tags" {
+#   type = list(map)
+#   default = [
+#     {
+#       Name = "catalogue"
+#     },
+#     {
+#       Environment = "dev"
+#     },
+#     {
+#       Terraform = true
+#     },
+#   ]
+# }

@@ -117,7 +117,7 @@ resource "terraform_data" "catalogue_terminate" {
   }
 }
 
-# # launch template
+# launch template
 resource "aws_launch_template" "catalogue" {
   name = "${var.project}-${var.environment}-catalogue"
 
@@ -125,8 +125,13 @@ resource "aws_launch_template" "catalogue" {
   instance_type          = var.instance_type
   vpc_security_group_ids = local.catalogue_sg_id
 
+  # when traffic getting low , should be turn off , not just stopped 
   instance_initiated_shutdown_behavior = "terminate"
 
+  #each time we update , new version will become default version
+  update_default_version = true
+
+  # ec2-tags
   tag_specifications {
     resource_type = "instance"
 
@@ -137,7 +142,7 @@ resource "aws_launch_template" "catalogue" {
       }
     )
   }
-
+  # volume-tags
   tag_specifications {
     resource_type = "volume"
 
@@ -156,6 +161,85 @@ resource "aws_launch_template" "catalogue" {
       Name = "${var.project}-${var.environment}-catalogue"
     }
   )
-
 }
 
+# auto-scaling 
+resource "aws_autoscaling_group" "catalogue" {
+  name = "${var.project}-${var.environment}-catalogue"
+
+  desired_capacity = 1
+  max_size         = 10
+  min_size         = 1
+
+  # checking health of ELB  
+  health_check_grace_period = 90 # grace period to check health after launch
+  health_check_type         = "ELB"
+
+  vpc_zone_identifier = local.private_subnet_ids
+
+  # push new instances those created in auto-scaling to target group
+  target_group_arns = [aws_lb_target_group.catalogue.arn]
+
+  # take latest version of launch template
+  launch_template {
+    id      = aws_launch_template.catalogue.id
+    version = aws_launch_template.catalogue.latest_version
+  }
+
+  # while updating old version instance down bring new version up
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["launch_template"]
+  }
+
+  timeouts {
+    delete = "15m"
+  }
+
+  dynamic "tag" {
+    for_each = merge(
+      local.common_tags,
+      {
+        Name = "${var.project}-${var.environment}-catalogue"
+      }
+    )
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
+  }
+}
+
+
+resource "aws_autoscaling_policy" "example" {
+  name                   = "${var.project}-${var.environment}-catalogue"
+  autoscaling_group_name = aws_autoscaling_group.catalogue.name
+  policy_type            = "TargetTrackingScaling"
+  # cooldown               = 120 # after launch 2ait for 120 sec to collect metrics
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 75.0
+  }
+}
+
+# host_based_weighted_routing
+resource "aws_lb_listener_rule" "catalogue" {
+  listener_arn = data.aws_ssm_parameter.backend_alb_listener_arn.value
+  priority     = 10
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.catalogue.arn
+  }
+
+  condition {
+    host_header {
+      values = ["catalogue.backend-${var.environment}.${var.domain}"]
+    }
+  }
+}
