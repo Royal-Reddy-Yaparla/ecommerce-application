@@ -3,6 +3,16 @@ backend-alb:  # frontend-facing, not accepting direct inbound
       ports: [80]
   - bastion:
       ports: [80]
+frontend-alb:  #
+  - public-access:
+      ports: [80, 443]
+
+---
+# frontend 
+frontend: # inbound
+  - frontend-alb:
+      ports: [80, 443]
+
 ---
 # backend services
 catalogue: # inbound

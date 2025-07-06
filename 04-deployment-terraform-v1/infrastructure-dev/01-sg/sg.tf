@@ -291,3 +291,73 @@ resource "aws_security_group_rule" "mongodb_catalogue_ingress_rules" {
   source_security_group_id = module.catalogue.sg_id
   security_group_id        = module.mongodb.sg_id
 }
+
+# frontend alb
+module "frontend_alb" {
+  source         = "../../modules/sg"
+  sg_name        = "frontend_alb"
+  sg_description = "allowing HTTP and HTTPS"
+  vpc_id         = local.vpc_id
+  project        = var.project
+  environment    = var.environment
+}
+
+# allowing http from 0.0.0.0/0
+resource "aws_security_group_rule" "frontend_alb_http_ingress_rule" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.frontend_alb.sg_id
+}
+
+# allowing https from 0.0.0.0/0
+resource "aws_security_group_rule" "frontend_alb_https_ingress_rule" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.frontend_alb.sg_id
+}
+
+resource "aws_security_group_rule" "frontend_alb_egress_rules" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.frontend_alb.sg_id
+}
+
+# frontend
+module "frontend" {
+  source         = "../../modules/sg"
+  sg_name        = "frontend"
+  sg_description = "allowing SSH,HTTP and HTTPS"
+  vpc_id         = local.vpc_id
+  project        = var.project
+  environment    = var.environment
+}
+
+# frontend ingress
+resource "aws_security_group_rule" "frontend_frontend_alb_ingress_rules" {
+  count                    = length(var.frontend_ports)
+  type                     = "ingress"
+  from_port                = var.frontend_ports[count.index]
+  to_port                  = var.frontend_ports[count.index]
+  protocol                 = "tcp"
+  source_security_group_id = module.frontend_alb.sg_id
+  security_group_id        = module.frontend.sg_id
+}
+
+# frontend egress
+resource "aws_security_group_rule" "frontend_egress_rules" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.frontend.sg_id
+}

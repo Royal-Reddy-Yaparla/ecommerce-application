@@ -27,3 +27,5 @@ resource "aws_acm_certificate_validation" "main" {
   certificate_arn = aws_acm_certificate.main.arn
   validation_record_fqdns = [aws_route53_record.main.fqdn]
 }
+
+# source: https://dev.to/aws-builders/create-acm-certificate-with-dns-validation-using-terraform-2adf
