@@ -47,5 +47,5 @@ variable "catalogue_ports" {
 
 variable "frontend_ports" {
   type    = list(any)
-  default = [22, 80, 443]
+  default = [80, 443]
 }

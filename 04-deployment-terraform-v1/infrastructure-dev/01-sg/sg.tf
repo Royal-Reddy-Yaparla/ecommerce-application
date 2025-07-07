@@ -361,3 +361,13 @@ resource "aws_security_group_rule" "frontend_egress_rules" {
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = module.frontend.sg_id
 }
+
+resource "aws_security_group_rule" "backend_alb_frontend_ingress_rules" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  depends_on               = [module.vpn.sg_id]
+  source_security_group_id = module.frontend.sg_id
+  security_group_id        = module.backend_alb.sg_id
+}
