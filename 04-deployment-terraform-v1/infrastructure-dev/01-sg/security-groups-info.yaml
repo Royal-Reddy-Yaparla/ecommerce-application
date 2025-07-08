@@ -8,13 +8,13 @@ backend-alb:  # frontend-facing, not accepting direct inbound
 
 frontend-alb:  #
   - public-access:
-      ports: [80, 443]
+      ports: [443]
 
 ---
 # frontend 
 frontend: # inbound
   - frontend-alb:
-      ports: [80, 443]
+      ports: [80, 443,22]
 
 ---
 # backend services

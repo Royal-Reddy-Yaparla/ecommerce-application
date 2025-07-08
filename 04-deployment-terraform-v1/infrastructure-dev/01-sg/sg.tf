@@ -303,14 +303,14 @@ module "frontend_alb" {
 }
 
 # allowing http from 0.0.0.0/0
-resource "aws_security_group_rule" "frontend_alb_http_ingress_rule" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.frontend_alb.sg_id
-}
+# resource "aws_security_group_rule" "frontend_alb_http_ingress_rule" {
+#   type              = "ingress"
+#   from_port         = 80
+#   to_port           = 80
+#   protocol          = "tcp"
+#   cidr_blocks       = ["0.0.0.0/0"]
+#   security_group_id = module.frontend_alb.sg_id
+# }
 
 # allowing https from 0.0.0.0/0
 resource "aws_security_group_rule" "frontend_alb_https_ingress_rule" {
@@ -351,6 +351,35 @@ resource "aws_security_group_rule" "frontend_frontend_alb_ingress_rules" {
   source_security_group_id = module.frontend_alb.sg_id
   security_group_id        = module.frontend.sg_id
 }
+
+# frontend ingress
+resource "aws_security_group_rule" "frontend_vpn_ingress_rules" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id        = module.frontend.sg_id
+}
+
+resource "aws_security_group_rule" "frontend_ssh_all_ingress_rules" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id        = module.frontend.sg_id
+}
+
+resource "aws_security_group_rule" "frontend_bastion_ingress_rules" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  source_security_group_id = module.bastion.sg_id
+  security_group_id        = module.frontend.sg_id
+}
+
 
 # frontend egress
 resource "aws_security_group_rule" "frontend_egress_rules" {

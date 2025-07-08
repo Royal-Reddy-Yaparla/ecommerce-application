@@ -1,7 +1,7 @@
 resource "aws_lb_target_group" "frontend" {
   name     = "${var.project}-${var.environment}-frontend"
-  port     = 443
-  protocol = "HTTPS" #80
+  port     = 80
+  protocol = "HTTP" #80
   vpc_id   = local.vpc_id
   /* This sets a 120-second delay before the ALB stops sending traffic to a target
   When a target is scheduled for removal (e.g., ASG scale-in or Terraform destroy), 
@@ -14,7 +14,7 @@ resource "aws_lb_target_group" "frontend" {
     interval            = 5
     unhealthy_threshold = 3
     timeout             = 2 # with in 2sec to get response
-    port                = 443
+    port                = 80
     path                = "/"
     matcher             = "200-299"
   }

@@ -37,7 +37,7 @@ resource "aws_lb_listener" "frontend_https" {
 
 resource "aws_route53_record" "frontend_alb" {
   zone_id = var.zone_id
-  name = "*.${var.environment}.${var.domain}"
+  name = "${var.environment}.${var.domain}"
   type = "A"
   alias {
     name                   = module.alb.dns_name
