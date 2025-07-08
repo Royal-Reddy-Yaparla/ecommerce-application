@@ -1,0 +1,66 @@
+Open-source VPN
+provider: openVPN
+
+- provision an ec2 instance with AMI 
+  AMI: OpenVPN Access Server Community -8fbe*
+
+- create security group for VPN 
+  with ports enable
+    - 22
+    - 443
+    - 1194
+    - 943 
+
+  cidr_block 0.0.0.0/0
+
+- create a key-pair
+
+- select vpc 
+- public subnet 1a
+- security-group vpn's security-group
+
+- openVPN default user : openvpnas 
+  https://openvpn.net/as-docs/aws-ec2.html#---connect-to-your-new-ami-76631
+
+- connect ec2 by ssh , after login 
+- prompt - yes / enter
+
+- setup password : Admin@123
+
+- no key just enter 
+
+- after configuration , access Admin UI: , afte login as Admin
+- here we can see option , we can see all options 
+
+---------------------------------------------------------------------------
+now setup client in our local machines 
+
+- tool called: openVPN connect 
+  https://openvpn.net/client/
+
+- download and install 
+- from ec2 will get client UI 
+- paste in in Type Server address / Cloud ID (VPN server ID)
+  - enter
+      - username
+      - password
+- check pc ip address.
+
+-----------------------------------------------------
+login to admin 
+https://<public_ip of vpn server>:943/admin 
+
+username: openvpn 
+password: Admin@123 
+
+client
+https://<public_ip of vpn server>:943/ 
+
+username: openvpn 
+password: Admin@123 
+------------------------------------------------------------
+login into vpn server
+ssh -i <.pem> openvpnas@https://<public_ip>
+
+netstat -lntp
+---------------------------------------------------------------

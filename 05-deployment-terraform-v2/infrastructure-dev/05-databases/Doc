@@ -1,0 +1,5 @@
+to check connection from vpn to mongongb
+
+ssh -i ecom-project ec2-user@10.0.21.17
+
+ssh -i <.pem key>   

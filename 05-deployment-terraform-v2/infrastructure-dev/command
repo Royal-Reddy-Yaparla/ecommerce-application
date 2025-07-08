@@ -1,0 +1,17 @@
+single command for create infra 
+from location: 04-deployment-terraform-v1
+for i in 00-vpc/ 01-sg/ 02-bastion/ ; do cd $i; terraform apply -auto-approve ; cd ..; done
+
+single command for destroy infra 
+from location: 04-deployment-terraform-v1
+for i in  02-bastion/ 01-sg/ 00-vpc/; do cd $i ; terraform destroy -auto-approve ; cd ..; done
+
+
+
+trivia
+for i in 00-vpc/ 01-sg/ 03-vpn/ 05-databases/ 06-backend-alb/ 07-catalogue/; do cd $i; terraform apply -auto-approve ; cd ..; done
+
+for i in 00-vpc/ 01-sg/ 03-vpn/ 05-databases/ 06-backend-alb/ ; do cd $i; terraform apply -auto-approve ; cd ..; done
+
+
+for i in  06-backend-alb/ 05-databases/ 03-vpn/ 01-sg/ 00-vpc/; do cd $i; terraform destroy -auto-approve ; cd ..; done
