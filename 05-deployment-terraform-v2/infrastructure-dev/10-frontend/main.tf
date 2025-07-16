@@ -195,7 +195,7 @@ resource "aws_autoscaling_policy" "frontend" {
 # host_based_weighted_routing
 resource "aws_lb_listener_rule" "frontend" {
   listener_arn = data.aws_ssm_parameter.frontend_alb_listener_arn.value
-  priority     = 10
+  priority     = 2
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.frontend.arn

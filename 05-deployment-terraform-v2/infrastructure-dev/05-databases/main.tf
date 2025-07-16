@@ -70,126 +70,126 @@ resource "terraform_data" "mongodb" {
   }
 }
 
-# # redis
-# resource "aws_instance" "redis" {
-#   ami                    = data.aws_ami.custom_ami.id
-#   instance_type          = var.instance_type
-#   vpc_security_group_ids = local.redis_sg_id
-#   subnet_id              = local.subnet_id
+# redis
+resource "aws_instance" "redis" {
+  ami                    = data.aws_ami.custom_ami.id
+  instance_type          = var.instance_type
+  vpc_security_group_ids = local.redis_sg_id
+  subnet_id              = local.subnet_id
 
-#   tags = merge(
-#     var.ec2_tags,
-#     local.common_tags,
-#     {
-#       Name = "${var.project}-${var.environment}-redis"
-#     }
-#   )
-# }
+  tags = merge(
+    var.ec2_tags,
+    local.common_tags,
+    {
+      Name = "${var.project}-${var.environment}-redis"
+    }
+  )
+}
 
-# # null resource
-# resource "terraform_data" "redis" {
-#   triggers_replace = [aws_instance.redis.id]
-#   provisioner "file" {
-#     source      = "scripts/bootstrap.sh"
-#     destination = "/tmp/redis.sh"
-#   }
-#   connection {
-#     type     = "ssh"
-#     user     = "ec2-user"
-#     password = "DevOps321"
-#     host     = aws_instance.redis.private_ip
-#   }
-#   provisioner "remote-exec" {
-#     inline = [
-#       "sudo chmod +x /tmp/redis.sh",
-#       "sudo sh /tmp/redis.sh redis dev"
-#     ]
-#   }
-# }
-
-
-# # rabbitmq
-# resource "aws_instance" "rabbitmq" {
-#   ami                    = data.aws_ami.custom_ami.id
-#   instance_type          = var.instance_type
-#   vpc_security_group_ids = local.rabbitmq_sg_id
-#   subnet_id              = local.subnet_id
-
-#   tags = merge(
-#     var.ec2_tags,
-#     local.common_tags,
-#     {
-#       Name = "${var.project}-${var.environment}-rabbitmq"
-#     }
-#   )
-# }
-
-# # null resource
-# resource "terraform_data" "rabbitmq" {
-#   triggers_replace = [aws_instance.rabbitmq.id]
-#   provisioner "file" {
-#     source      = "scripts/bootstrap.sh"
-#     destination = "/tmp/rabbitmq.sh"
-#   }
-#   connection {
-#     type     = "ssh"
-#     user     = "ec2-user"
-#     password = "DevOps321"
-#     host     = aws_instance.rabbitmq.private_ip
-#   }
-#   provisioner "remote-exec" {
-#     inline = [
-#       "sudo chmod +x /tmp/rabbitmq.sh",
-#       "sudo sh /tmp/rabbitmq.sh rabbitmq dev"
-#     ]
-#   }
-# }
+# null resource
+resource "terraform_data" "redis" {
+  triggers_replace = [aws_instance.redis.id]
+  provisioner "file" {
+    source      = "scripts/bootstrap.sh"
+    destination = "/tmp/redis.sh"
+  }
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.redis.private_ip
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /tmp/redis.sh",
+      "sudo sh /tmp/redis.sh redis dev"
+    ]
+  }
+}
 
 
-# # mysql
-# resource "aws_instance" "mysql" {
-#   ami                    = data.aws_ami.custom_ami.id
-#   instance_type          = var.instance_type
-#   vpc_security_group_ids = local.mysql_sg_id
-#   subnet_id              = local.subnet_id
-#   iam_instance_profile   = "EcomAdminAccess" # iam role to access ssm params access
-#   tags = merge(
-#     var.ec2_tags,
-#     local.common_tags,
-#     {
-#       Name = "${var.project}-${var.environment}-mysql"
-#     }
-#   )
-# }
+# rabbitmq
+resource "aws_instance" "rabbitmq" {
+  ami                    = data.aws_ami.custom_ami.id
+  instance_type          = var.instance_type
+  vpc_security_group_ids = local.rabbitmq_sg_id
+  subnet_id              = local.subnet_id
 
-# # null resource
-# resource "terraform_data" "mysql" {
-#   triggers_replace = [aws_instance.mysql.id]
-#   provisioner "file" {
-#     source      = "scripts/bootstrap.sh"
-#     destination = "/tmp/mysql.sh"
-#   }
-#   connection {
-#     type     = "ssh"
-#     user     = "ec2-user"
-#     password = "DevOps321"
-#     host     = aws_instance.mysql.private_ip
-#   }
-#   provisioner "remote-exec" {
-#     inline = [
-#       "sudo chmod +x /tmp/mysql.sh",
-#       "sudo sh /tmp/mysql.sh mysql dev"
-#     ]
-#   }
-# }
+  tags = merge(
+    var.ec2_tags,
+    local.common_tags,
+    {
+      Name = "${var.project}-${var.environment}-rabbitmq"
+    }
+  )
+}
 
-# resource "aws_route53_record" "mysql" {
-#   zone_id = var.zone_id
-#   name    = "mysql-${var.environment}.${var.domain}"
-#   type    = "A"
-#   ttl     = 1
-#   records = [aws_instance.mysql.private_ip]
-# }
+# null resource
+resource "terraform_data" "rabbitmq" {
+  triggers_replace = [aws_instance.rabbitmq.id]
+  provisioner "file" {
+    source      = "scripts/bootstrap.sh"
+    destination = "/tmp/rabbitmq.sh"
+  }
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.rabbitmq.private_ip
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /tmp/rabbitmq.sh",
+      "sudo sh /tmp/rabbitmq.sh rabbitmq dev"
+    ]
+  }
+}
+
+
+# mysql
+resource "aws_instance" "mysql" {
+  ami                    = data.aws_ami.custom_ami.id
+  instance_type          = var.instance_type
+  vpc_security_group_ids = local.mysql_sg_id
+  subnet_id              = local.subnet_id
+  iam_instance_profile   = "EcomAdminAccess" # iam role to access ssm params access
+  tags = merge(
+    var.ec2_tags,
+    local.common_tags,
+    {
+      Name = "${var.project}-${var.environment}-mysql"
+    }
+  )
+}
+
+# null resource
+resource "terraform_data" "mysql" {
+  triggers_replace = [aws_instance.mysql.id]
+  provisioner "file" {
+    source      = "scripts/bootstrap.sh"
+    destination = "/tmp/mysql.sh"
+  }
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.mysql.private_ip
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /tmp/mysql.sh",
+      "sudo sh /tmp/mysql.sh mysql dev"
+    ]
+  }
+}
+
+resource "aws_route53_record" "mysql" {
+  zone_id = var.zone_id
+  name    = "mysql-${var.environment}.${var.domain}"
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.mysql.private_ip]
+}
 
 resource "aws_route53_record" "mongodb" {
   zone_id = var.zone_id
@@ -199,18 +199,18 @@ resource "aws_route53_record" "mongodb" {
   records = [aws_instance.mongodb.private_ip]
 }
 
-# resource "aws_route53_record" "redis" {
-#   zone_id = var.zone_id
-#   name    = "redis-${var.environment}.${var.domain}"
-#   type    = "A"
-#   ttl     = 1
-#   records = [aws_instance.redis.private_ip]
-# }
+resource "aws_route53_record" "redis" {
+  zone_id = var.zone_id
+  name    = "redis-${var.environment}.${var.domain}"
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.redis.private_ip]
+}
 
-# resource "aws_route53_record" "rabbitmq" {
-#   zone_id = var.zone_id
-#   name    = "rabbitmq-${var.environment}.${var.domain}"
-#   type    = "A"
-#   ttl     = 1
-#   records = [aws_instance.rabbitmq.private_ip]
-# }
+resource "aws_route53_record" "rabbitmq" {
+  zone_id = var.zone_id
+  name    = "rabbitmq-${var.environment}.${var.domain}"
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.rabbitmq.private_ip]
+}

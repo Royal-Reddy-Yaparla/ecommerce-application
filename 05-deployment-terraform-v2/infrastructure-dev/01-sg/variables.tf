@@ -45,7 +45,27 @@ variable "catalogue_ports" {
   default = [22, 8080]
 }
 
+variable "user_ports" {
+  type    = list
+  default = [22, 8080]
+}
+
+variable "cart_ports" {
+  type    = list
+  default = [22, 8080]
+}
+
+variable "shipping_ports" {
+  type    = list
+  default = [22, 8080]
+}
+
+variable "payment_ports" {
+  type    = list
+  default = [22, 8080]
+}
+
 variable "frontend_ports" {
   type    = list(any)
-  default = [80, 443]
+  default = [80]
 }

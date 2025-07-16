@@ -16,9 +16,9 @@ variable "environment" {
   default = "dev"
 }
 
-variable "component" {
-  default = "catalogue"
-}
+# variable "component" {
+#   default = "catalogue"
+# }
 variable "ec2_tags" {
   default = {
     region  = "us-east-1"
@@ -39,9 +39,28 @@ variable "components" {
     name = string
     priority = number
   }))
-  default = [ {
+  default = [ 
+    {
     name = "catalogue"
     priority = 10
-  } ]
+    },
+    {
+    name = "user"
+    priority = 20
+    },
+    {
+    name = "cart"
+    priority = 30
+    },
+    {
+    name = "shipping"
+    priority = 40
+    },
+    {
+    name = "payment"
+    priority = 50
+    }
+  
+   ]
 
 }
